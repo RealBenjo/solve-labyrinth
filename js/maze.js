@@ -7,6 +7,8 @@ const min_size = 30;
 const start = [0, 0];
 const end = [49, 49]; // only if 50 x 50 maze!!!
 
+
+var invalidDir; // prevents the maze algorith to backtrack (goes from: 0 -> 3)
 var cellSize; // maze cell size in pixels
 
 makeMaze(50); // make the maze at site start up
@@ -41,6 +43,7 @@ function makeMaze(size) {
 
 
 function generateMaze(maze, startX, startY, endX, endY) {
+  var isFirstIteration = true
   var nextCoords = new Array;
 
   var currentX = startX;
@@ -56,15 +59,30 @@ function generateMaze(maze, startX, startY, endX, endY) {
   var dir = 0;
   var i = 0;
   while (i < 5000) { //currentX != endX || currentY != endY
+    if (isFirstIteration) {
+      dir = Math.random() < 0.5 ? 1 : 2;
+      isFirstIteration = false;
 
-    // make a random direction
-    dir = Math.floor( Math.random() * 4 );
+    } else {
+      while (true) {
+        // make a random direction
+        dir = Math.floor( Math.random() * 4 );
 
-    nextCoords = check2DArrayBounds(dir, nextX, nextY, maze.length);
+        if (dir != invalidDir) break;
+      }
+    }
+
+    nextCoords = check2DArrayBoundsWithDir(dir, nextX, nextY, maze.length);
+
     nextX = nextCoords[0];
     nextY = nextCoords[1];
 
-    maze[nextX][nextY] = 0;
+    if ( checkNeighbors(maze, nextX, nextY, currentX, currentY) ) {
+      currentX = nextX;
+      currentY = nextY;
+      maze[currentX][currentY] = 0;
+    }
+
 
     i++;
   }
@@ -73,7 +91,56 @@ function generateMaze(maze, startX, startY, endX, endY) {
 
 
 // AUX //
-function check2DArrayBounds(direction, x, y, arrayLength) {
+function checkNeighbors(maze, x, y, prevX, prevY) {
+  // if up; check left, up, right
+  if (y < prevY) {
+    if ( checkLeft(maze,x,y) && checkUp(maze,x,y) && checkRight(maze,x,y) ) {
+      invalidDir = 0;
+      return true;
+    } else return false;
+  }
+  // if right; check up, right, down
+  else if (x > prevX) {
+    if ( checkUp(maze,x,y) && checkRight(maze,x,y) && checkDown(maze,x,y) ) {
+      invalidDir = 1;
+      return true;
+    } else return false;
+  }
+  // if down; check right, down, left
+  else if (y > prevY) {
+    if ( checkRight(maze,x,y) && checkDown(maze,x,y) && checkLeft(maze,x,y)) {
+      invalidDir = 2;
+      return true;
+    } else return false;
+  }
+  // if left; check down, left, up
+  else if (x < prevX) {
+    if ( checkDown(maze,x,y) && checkLeft(maze,x,y) && checkUp(maze,x,y)) {
+      invalidDir = 3;
+      return true;
+    } else return false;
+  }
+}
+
+function checkUp(maze, x, y) {
+  // if out of bounds simply treat as a wall
+  if ( y-1 < 0 || maze[x][y-1] == 1 ) return true;
+  return false;
+}
+function checkRight(maze, x, y) {
+  if ( x+1 >= maze.length || maze[x+1][y] == 1) return true;
+  return false;
+}
+function checkDown(maze, x, y) {
+  if ( y+1 >= maze.length || maze[x][y+1] == 1) return true;
+  return false;
+}
+function checkLeft(maze, x, y) {
+  if ( x-1 < 0 || maze[x-1][y] == 1) return true;
+  return false;
+}
+
+function check2DArrayBoundsWithDir(direction, x, y, arrayLength) {
   switch (direction) {
     // up
     case 0:
@@ -96,6 +163,11 @@ function check2DArrayBounds(direction, x, y, arrayLength) {
       break;
   }
   return [x, y];
+}
+
+function check2DArrayBounds(x, y, arrayLength) {
+  if (x >= 0 && y >= 0 && x < arrayLength && y < arrayLength) return true;
+  return false;
 }
 
 
