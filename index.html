@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title id="title">Solve labyrinth</title>
+  <link rel="icon" href="">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div id="main">
+    <canvas id="maze_canvas">
+      if you see this text, the canvas did not load correctly
+    </canvas>
+    
+    <label>input the X size: </label><input type="number" id="sizeX">
+    <label>input the Y size: </label><input type="number" id="sizeY">
+    <button id="gen_maze_button" onclick="generateMaze(30, 30)">Generate Maze</button>
+    
+    <script src="js/maze.js"></script>
+  </div>
+</body>

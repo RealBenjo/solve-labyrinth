@@ -1,0 +1,9 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+
+.default_button {
+  width: 30px;
+  height: 15px;
+}
