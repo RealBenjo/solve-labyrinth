@@ -58,7 +58,7 @@ function generateMaze(maze, startX, startY, endX, endY) {
 
   var dir = 0;
   var i = 0;
-  while (i < 5000) { //currentX != endX || currentY != endY
+  while (i < 2) { //currentX != endX || currentY != endY
     if (isFirstIteration) {
       dir = Math.random() < 0.5 ? 1 : 2;
       isFirstIteration = false;
@@ -72,7 +72,7 @@ function generateMaze(maze, startX, startY, endX, endY) {
       }
     }
 
-    nextCoords = check2DArrayBoundsWithDir(dir, nextX, nextY, maze.length);
+    nextCoords = check2DArrayBoundsWithDir(dir, currentX, currentY, maze.length);
 
     nextX = nextCoords[0];
     nextY = nextCoords[1];
@@ -141,6 +141,7 @@ function checkLeft(maze, x, y) {
 }
 
 function check2DArrayBoundsWithDir(direction, x, y, arrayLength) {
+  console.log(x+ ", " + y);
   switch (direction) {
     // up
     case 0:
@@ -162,6 +163,7 @@ function check2DArrayBoundsWithDir(direction, x, y, arrayLength) {
       if (x - 1 >= 0) x--;
       break;
   }
+  console.log(x+ ", " + y);
   return [x, y];
 }
 
