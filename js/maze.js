@@ -1,34 +1,42 @@
 const maze_canvas_name = "maze_canvas";
+const size_input_name = "maze_size";
+
 const maze_canvas = document.getElementById(maze_canvas_name);
+const size_input = document.getElementById(size_input_name);
 const ctx = maze_canvas.getContext("2d");
 
-const min_size = 30;
+const min_size = 10;
 const start = [0, 0];
-const end = [49, 49];
+var mazeSize = size_input.value;
+var end = [mazeSize-1, mazeSize-1];
 
 var cellSize;
 
-makeMaze(50); // make the maze at site start up
+makeMaze(mazeSize); // make the maze at site start up
 
-function makeMaze(size) {
-  if (size < min_size) {
+function makeMaze() {
+  // get the size value from user
+  mazeSize = size_input.value;
+  end = [mazeSize-1, mazeSize-1];
+
+  if (mazeSize < min_size) {
     console.log("sizeX is too small (min is " + min_size + ")");
     return;
   }
 
-  cellSize = maze_canvas.width / size;
+  cellSize = maze_canvas.width / mazeSize;
   
   // create matrix and fill it with walls (1 = wall, 0 = path)
-  var maze_matrix = new Array(size);
-  for (var i = 0; i < size; i++) {
-    maze_matrix[i] = new Array(size);
-    for (var j = 0; j < size; j++) {
+  var maze_matrix = new Array(mazeSize);
+  for (var i = 0; i < mazeSize; i++) {
+    maze_matrix[i] = new Array(mazeSize);
+    for (var j = 0; j < mazeSize; j++) {
       maze_matrix[i][j] = 1; // start with all walls
     }
   }
 
   generateMaze(maze_matrix, start[0], start[1]);
-  drawMaze(maze_matrix, size, cellSize);
+  drawMaze(maze_matrix, mazeSize, cellSize);
 }
 
 function generateMaze(maze, startX, startY) {
@@ -42,10 +50,10 @@ function generateMaze(maze, startX, startY) {
   prevMoves.push([startX, startY]); // remember the first move
   
   var directions = [
-    [0, -1], // up
-    [1, 0],  // right
-    [0, 1],  // down
-    [-1, 0]  // left
+    [0, -2], // up
+    [2, 0],  // right
+    [0, 2],  // down
+    [-2, 0]  // left
   ];
 
 
@@ -53,7 +61,9 @@ function generateMaze(maze, startX, startY) {
   var dir = directions[2];
 
   var i = 0;
-  while (prevMoves.length > 0) { //stack.length > 0
+
+  // when we backtrack to the start we end the algorithm
+  while (prevMoves.length > 0) {
     var prevCoords;
 
     // inverts the previous valid direction
@@ -76,14 +86,48 @@ function generateMaze(maze, startX, startY) {
   
       // we also save it in memory
       prevMoves.push([currentX, currentY]);
-      // and make sure we set the walked path as false / walkable
+
+      // set the inbetween path to false also
+
+      // if no change in x axis
+      if ( dir[0] == 0 ) {
+
+        // if y axis went down
+        if ( dir[1] > 0 ) {
+          // set the one above to false
+          maze[currentX][currentY - 1] = false;
+
+        }
+        
+        // if the y axis went up
+        else {
+          // set the one below to false
+          maze[currentX][currentY + 1] = false;
+        }
+      }
+
+      // if no change in y axis
+      else {
+
+        // if x axis went down
+        if ( dir[0] > 0 ) {
+          // set the one above to false
+          maze[currentX - 1][currentY] = false;
+
+        }
+        
+        // if the x axis went up
+        else {
+          // set the one below to false
+          maze[currentX + 1][currentY] = false;
+        }
+
+      }
+
+      // set the current x and y coords as a walked path -> false / walkable
       maze[currentX][currentY] = false;
     }
-
-
-    i++;
   }
-
 }
 
 function getNewDirection(directions, x, y, maze, oppositeDir) {
@@ -96,7 +140,7 @@ function getNewDirection(directions, x, y, maze, oppositeDir) {
   // check if it is a valid direction
   if (!compareDirections(dir, oppositeDir) && 
       checkBounds(x + dir[0], y + dir[1], maze.length) &&
-      checkNeighbors(directions, oppositeDir, x + dir[0], y + dir[1], maze) ) {
+      checkNextCell(x + dir[0], y + dir[1], maze) ) {
     return dir;
   }
 
@@ -110,7 +154,7 @@ function getNewDirection(directions, x, y, maze, oppositeDir) {
       // if a new direction is ok, we return that one
       if (!compareDirections(dir, oppositeDir) && 
       checkBounds(x + dir[0], y + dir[1], maze.length) &&
-      checkNeighbors(directions, oppositeDir, x + dir[0], y + dir[1], maze) ) {
+      checkNextCell(x + dir[0], y + dir[1], maze) ) {
         return dir;
       }
     }
@@ -123,38 +167,8 @@ function getNewDirection(directions, x, y, maze, oppositeDir) {
 
 
 // AUX //
-function checkNeighbors(directions, fromDir, x, y, maze) {
-  var wallCount = 0;
-
-  var nextX = x;
-  var nextY = y;
-
-  for (var i = 0; i < directions.length; i++) {
-    if ( compareDirections(directions[i], fromDir) ) { // we don't want to look at the direction we came from
-      /*console.log("we will NOT look in this direction:");
-      console.log(fromDir[0] + ", " + fromDir[1]);*/
-      continue;
-    }
-
-    var dir = directions[i];
-
-    nextX = x + dir[0];
-    nextY = y + dir[1];
-
-    //console.log(nextX + ", " + nextY);
-
-    if ( !checkBounds(nextX, nextY, maze.length) || maze[nextX][nextY] == 1 ) { // if out of bounds count as wall
-      wallCount++;
-      
-    } else if ( maze[nextX][nextY] == 0 ) {
-      /*console.log("another path here, not good");
-      console.log(dir[0] + ", " + dir[1]);
-      console.log(nextX + ", " + nextY);*/
-    }
-  }
-  //console.log("_________");
-
-  return wallCount >= 3;
+function checkNextCell(x, y, maze) {
+  if (maze[x][y] == 1) return true;
 }
 
 function compareDirections(dir1, dir2) {
