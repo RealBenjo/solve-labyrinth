@@ -2,6 +2,7 @@
 :root {
   --primary-bg-color: #10104a;
   --primary-text-color: #f4e7f6;
+  --maze-bg-color: #000000;
 }
 
 * {
@@ -18,14 +19,33 @@ body {
   height: 100vh;
 }
 #maze_container {
-  width: 500px;
-  height: 500px;
+  background-color: var(--maze-bg-color);
+  width: 550px;
+  height: 550px;
+}
+#param_container {
+  height: 100px;
+  width: 300px;
 }
 
+.centered_content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.col_dir {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
 .h_centered {
   margin: 0 auto;
 }
 .default_button {
   width: 30px;
   height: 15px;
+}
+.square_button {
+  width: 30px;
+  height: 30px;
 }

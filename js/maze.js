@@ -1,13 +1,10 @@
 const maze_canvas_name = "maze_canvas";
-const size_input_name = "maze_size";
 
 const maze_canvas = document.getElementById(maze_canvas_name);
-const size_input = document.getElementById(size_input_name);
 const ctx = maze_canvas.getContext("2d");
 
-const min_size = 10;
 const start = [0, 0];
-var mazeSize = size_input.value;
+var mazeSize = size;
 var end = [mazeSize-1, mazeSize-1];
 
 var cellSize;
@@ -16,11 +13,11 @@ makeMaze(mazeSize); // make the maze at site start up
 
 function makeMaze() {
   // get the size value from user
-  mazeSize = size_input.value;
+  mazeSize = size;
   end = [mazeSize-1, mazeSize-1];
 
   if (mazeSize < min_size) {
-    console.log("sizeX is too small (min is " + min_size + ")");
+    console.log("size is too small (min is " + min_size + ")");
     return;
   }
 
@@ -39,7 +36,7 @@ function makeMaze() {
   drawMaze(maze_matrix, mazeSize, cellSize);
 }
 
-function generateMaze(maze, startX, startY) {
+async function generateMaze(maze, startX, startY) {
   var currentX = startX;
   var currentY = startY;
 
@@ -94,6 +91,11 @@ function generateMaze(maze, startX, startY) {
 
       // set the current x and y coords as a walked path -> false / walkable
       maze[currentX][currentY] = false;
+
+      if (showGeneration) {
+        drawMaze(maze, size, cellSize);
+        await sleep(speed); // in miliseconds
+      }
     }
   }
 }
@@ -187,6 +189,10 @@ function compareDirections(dir1, dir2) {
 function checkBounds(x, y, arrayLength) {
   if (x >= 0 && y >= 0 && x < arrayLength && y < arrayLength) return true;
   return false;
+}
+
+function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
 }
 
 

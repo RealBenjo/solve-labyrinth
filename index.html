@@ -9,13 +9,33 @@
 </head>
 <body>
   <div id="main">
-    <div id="maze_container" class="h_centered">
-      <canvas id="maze_canvas" width="500px" height="500px">if you see this text, the canvas did not load correctly</canvas>
+    <div id="maze_stuff">
+      <div id="maze_container" class="h_centered centered_content">
+        <canvas id="maze_canvas" width="500px" height="500px">if you see this text, the canvas did not load correctly</canvas>
+      </div>
+      
+      <div id="maze_param_container" class="centered_content">
+        <div id="param_container" class="col_dir">
+          <div id="maze_size_param">
+            <button id="maze_size_minus" class="square_button" onclick="handleSizeChange(-2)">-</button>
+            <p id="size_display" style="display: inline;"></p>
+            <button id="maze_size_plus" class="square_button" onclick="handleSizeChange(2)">+</button>
+          </div>
+          
+          <div id="maze_speed_param">
+            <input id="speed_input" type="range" min="10" max="200" step="10" oninput="updateSpeed()">
+          </div>
+          
+          <div id="maze_generation_param">
+            <button id="gen_show_input" onclick="toggleShowGen()">OFF</button>
+          </div>
+        </div>
+
+        <button id="gen_maze_button" onclick="makeMaze()">Generate Maze</button>
+      </div>
     </div>
     
-    <label>input the maze size: </label><input type="number" id="maze_size" value="49">
-    <button id="gen_maze_button" onclick="makeMaze()">Generate Maze</button>
-    
+    <script src="js/mazeInputs.js"></script>
     <script src="js/maze.js"></script>
   </div>
 </body>
