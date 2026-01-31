@@ -26,12 +26,12 @@ function makeMaze() {
 
   cellSize = maze_canvas.width / mazeSize;
   
-  // create matrix and fill it with walls (1 = wall, 0 = path)
+  // create matrix and fill it with walls (true = wall, false = path)
   var maze_matrix = new Array(mazeSize);
   for (var i = 0; i < mazeSize; i++) {
     maze_matrix[i] = new Array(mazeSize);
     for (var j = 0; j < mazeSize; j++) {
-      maze_matrix[i][j] = 1; // start with all walls
+      maze_matrix[i][j] = true; // start with all walls
     }
   }
 
@@ -56,15 +56,17 @@ function generateMaze(maze, startX, startY) {
     [-2, 0]  // left
   ];
 
+  maze[startX][startY] == false;
+
 
   // actual maze algorithm stuff //
-  var dir = directions[2];
 
-  var i = 0;
+  // this does not actually force the maze in a downwards start, don't worry
+  var dir = directions[2];
 
   // when we backtrack to the start we end the algorithm
   while (prevMoves.length > 0) {
-    var prevCoords;
+    var prevCoords; // used for backtracking
 
     // inverts the previous valid direction
     var oppositeDir = [ -dir[0], -dir[1] ];
@@ -88,41 +90,7 @@ function generateMaze(maze, startX, startY) {
       prevMoves.push([currentX, currentY]);
 
       // set the inbetween path to false also
-
-      // if no change in x axis
-      if ( dir[0] == 0 ) {
-
-        // if y axis went down
-        if ( dir[1] > 0 ) {
-          // set the one above to false
-          maze[currentX][currentY - 1] = false;
-
-        }
-        
-        // if the y axis went up
-        else {
-          // set the one below to false
-          maze[currentX][currentY + 1] = false;
-        }
-      }
-
-      // if no change in y axis
-      else {
-
-        // if x axis went down
-        if ( dir[0] > 0 ) {
-          // set the one above to false
-          maze[currentX - 1][currentY] = false;
-
-        }
-        
-        // if the x axis went up
-        else {
-          // set the one below to false
-          maze[currentX + 1][currentY] = false;
-        }
-
-      }
+      maze = fillTheBlanks(dir, currentX, currentY, maze);
 
       // set the current x and y coords as a walked path -> false / walkable
       maze[currentX][currentY] = false;
@@ -144,37 +112,76 @@ function getNewDirection(directions, x, y, maze, oppositeDir) {
     return dir;
   }
 
+  // loops through every direction
   for (var i = 0; i < directions.length; i++) {
 
-    // we go through all remaining directions
-    if ( i != firstDirIndex) {
-      dir = directions[i];
-      oppositeDir = [ -dir[0], -dir[1] ];
+    // skip the first checked direction
+    if ( i == firstDirIndex) continue;
 
-      // if a new direction is ok, we return that one
-      if (!compareDirections(dir, oppositeDir) && 
-      checkBounds(x + dir[0], y + dir[1], maze.length) &&
-      checkNextCell(x + dir[0], y + dir[1], maze) ) {
-        return dir;
-      }
+    dir = directions[i];
+    oppositeDir = [ -dir[0], -dir[1] ];
+
+    // if a new direction is ok, we return that one
+    if (!compareDirections(dir, oppositeDir) && 
+    checkBounds(x + dir[0], y + dir[1], maze.length) &&
+    checkNextCell(x + dir[0], y + dir[1], maze) ) {
+      return dir;
     }
   }
   
   // if no directions were ok, we return an empty direction
+  // based on this info we backtrack in the maze to not get stuck
   return [0, 0];
 }
 
 
 
 // AUX //
-function checkNextCell(x, y, maze) {
-  if (maze[x][y] == 1) return true;
+function checkNextCell(nextX, nextY, maze) {
+  // this line could probably be avoided
+  // but i don't how to fix the maze looping on itself (if it gets to the starting coordinates) in a cleaner way.
+  // oh well...
+  if (nextX == start[0] && nextY == start[1]) return false;
+  return maze[nextX][nextY] == true;
+}
+
+function fillTheBlanks(dir, x, y, maze) {
+  // if no change in x axis
+  if ( dir[0] == 0 ) {
+    // if y axis went down
+    if ( dir[1] > 0 ) {
+      // set the one above to false
+      maze[x][y - 1] = false;
+    }
+    
+    // if the y axis went up
+    else {
+      // set the one below to false
+      maze[x][y + 1] = false;
+    }
+  }
+
+  // if no change in y axis
+  else {
+    // if x axis went left
+    if ( dir[0] > 0 ) {
+      // set the one above to false
+      maze[x - 1][y] = false;
+    }
+    
+    // if the x axis went right
+    else {
+      // set the one below to false
+      maze[x + 1][y] = false;
+    }
+  }
+
+  return maze;
 }
 
 function compareDirections(dir1, dir2) {
   return dir1[0] == dir2[0] && dir1[1] == dir2[1];
 }
-
 
 // simple array border check
 function checkBounds(x, y, arrayLength) {
@@ -211,107 +218,3 @@ function drawMaze(maze, size, cSize) {
     }
   }
 }
-
-// safekeeping //
-
-/*
-while (stack.length > 0) {
-    // Get current cell from stack
-    var current = stack[stack.length - 1];
-    var [x, y] = current;
-    
-    // Find unvisited neighbors (two cells away)
-    var neighbors = [];
-    
-    for (var i = 0; i < directions.length; i++) {
-      var nx = x + directions[i][0];
-      var ny = y + directions[i][1];
-      
-      // Check if neighbor is within bounds and is a wall
-      if (nx >= 0 && nx < maze.length && ny >= 0 && ny < maze[0].length && maze[nx][ny] === 1) {
-        neighbors.push([directions[i], i]);
-      }
-    }
-    
-    // If there are unvisited neighbors
-    if (neighbors.length > 0) {
-      // Randomly select one neighbor
-      var randomIndex = Math.floor(Math.random() * neighbors.length);
-      var [dir, dirIndex] = neighbors[randomIndex];
-      
-      // Calculate wall cell and new cell
-      var wx = x + dir[0] / 2;
-      var wy = y + dir[1] / 2;
-      var nx = x + dir[0];
-      var ny = y + dir[1];
-      
-      // Carve path through the wall and into the new cell
-      maze[wx][wy] = 0; // Remove wall
-      maze[nx][ny] = 0; // Mark new cell as path
-      
-      // Push new cell to stack
-      stack.push([nx, ny]);
-    } else {
-      // Backtrack (pop from stack)
-      stack.pop();
-    }
-  }
-
-function check2DArrayBoundsWithDir(direction, x, y, arrayLength) {
-  console.log(x+ ", " + y);
-  switch (direction) {
-    // up
-    case 0:
-      if (y - 1 >= 0) y--;
-      break;
-
-    // right
-    case 1:
-      if (x + 1 < arrayLength) x++;
-      break;
-
-    // down
-    case 2:
-      if (y + 1 < arrayLength) y++;
-      break;
-
-    // left
-    case 3:
-      if (x - 1 >= 0) x--;
-      break;
-  }
-  console.log(x+ ", " + y);
-  return [x, y];
-}
-
-function checkNeighbors(maze, x, y, prevX, prevY) {
-  // if up; check left, up, right
-  if (y < prevY) {
-    if ( checkLeft(maze,x,y) && checkUp(maze,x,y) && checkRight(maze,x,y) ) {
-      prevDir = 0;
-      return true;
-    } else return false;
-  }
-  // if right; check up, right, down
-  else if (x > prevX) {
-    if ( checkUp(maze,x,y) && checkRight(maze,x,y) && checkDown(maze,x,y) ) {
-      prevDir = 1;
-      return true;
-    } else return false;
-  }
-  // if down; check right, down, left
-  else if (y > prevY) {
-    if ( checkRight(maze,x,y) && checkDown(maze,x,y) && checkLeft(maze,x,y)) {
-      prevDir = 2;
-      return true;
-    } else return false;
-  }
-  // if left; check down, left, up
-  else if (x < prevX) {
-    if ( checkDown(maze,x,y) && checkLeft(maze,x,y) && checkUp(maze,x,y)) {
-      prevDir = 3;
-      return true;
-    } else return false;
-  }
-}
-*/
