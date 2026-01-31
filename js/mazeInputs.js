@@ -10,7 +10,7 @@ const min_size = 10;
 
 var showGeneration = false;
 var speed = gen_speed.value;
-var size = 11;
+var size = 25;
 
 size_display.innerText = size;
 

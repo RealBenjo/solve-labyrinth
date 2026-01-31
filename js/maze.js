@@ -7,19 +7,20 @@ const start = [0, 0];
 var mazeSize = size;
 var end = [mazeSize-1, mazeSize-1];
 
+var showGen = showGeneration;
+
 var cellSize;
 
 makeMaze(mazeSize); // make the maze at site start up
 
 function makeMaze() {
+
+  // take these inputs only when make maze is run
+  showGen = showGeneration;
+
   // get the size value from user
   mazeSize = size;
   end = [mazeSize-1, mazeSize-1];
-
-  if (mazeSize < min_size) {
-    console.log("size is too small (min is " + min_size + ")");
-    return;
-  }
 
   cellSize = maze_canvas.width / mazeSize;
   
@@ -92,7 +93,7 @@ async function generateMaze(maze, startX, startY) {
       // set the current x and y coords as a walked path -> false / walkable
       maze[currentX][currentY] = false;
 
-      if (showGeneration) {
+      if (showGen) {
         drawMaze(maze, size, cellSize);
         await sleep(speed); // in miliseconds
       }
@@ -199,13 +200,13 @@ function sleep(ms) {
 
 function drawMaze(maze, size, cSize) {
   // Clear canvas
-  ctx.fillStyle = "white";
+  ctx.fillStyle = "black";
   ctx.fillRect(0, 0, maze_canvas.width, maze_canvas.height);
   
   // Draw maze
   for (var x = 0; x < size; x++) {
     for (var y = 0; y < size; y++) {
-      if (maze[x][y] == 1) {
+      if (maze[x][y] == true) {
         ctx.fillStyle = "black"; // Wall
       } else {
         ctx.fillStyle = "white"; // Path
