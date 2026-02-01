@@ -13,9 +13,16 @@ maze_canvas.width = 500;
 maze_canvas.height = 500;
 
 var cellSize;
+var currentGeneration = 0; // increment to cancel running generation
+var isMazeGenerating = false;
+
+function stopCurrentMazeGen() {
+  // bump generation id to cancel any running generation and allow a new one
+  currentGeneration++;
+  canMazeGen = true;
+}
 
 makeMaze(); // make the maze at site start up
-
 async function makeMaze() {
   // if maze is being generated, prevent another one being generated
   if (!canMazeGen) {
@@ -24,7 +31,7 @@ async function makeMaze() {
     mazeSize = size;
     canMazeGen = false;
   }
-
+  
   // get the size value from user
   end = [mazeSize-1, mazeSize-1];
 
@@ -39,13 +46,15 @@ async function makeMaze() {
     }
   }
 
-  await generateMaze(maze_matrix, start[0], start[1]);
+  // start generation: bump id so older runs stop, capture id for this run
+  const myGenId = ++currentGeneration;
+  await generateMaze(maze_matrix, start[0], start[1], myGenId);
   drawMaze(maze_matrix, mazeSize, cellSize);
 
   canMazeGen = true;
 }
 
-async function generateMaze(maze, startX, startY) {
+async function generateMaze(maze, startX, startY, genId) {
   start_to_end = distanceBetween(start[0], start[1], end[0], end[1]);
   
   var currentX = startX;
@@ -75,6 +84,11 @@ async function generateMaze(maze, startX, startY) {
 
   // when we backtrack to the start we end the algorithm
   while (prevMoves.length > 0) {
+    // if another generation was requested, abort this run
+    if (genId !== currentGeneration) return;
+    isMazeGenerating = true;
+
+
     var prevCoords; // used for backtracking
 
     // inverts the previous valid direction
@@ -105,12 +119,14 @@ async function generateMaze(maze, startX, startY) {
       // set the current x and y coords as a walked path -> false / walkable
       maze[currentX][currentY] = false;
 
-      if (showGeneration) {
+      if (typeof showMazeGen !== 'undefined' ? showMazeGen : false) {
         drawMaze(maze, mazeSize, cellSize);
         await wait(speed); // in miliseconds
+        if (genId !== currentGeneration) return;
       }
     }
   }
+  isMazeGenerating = false;
 }
 
 function getNewDirection(directions, x, y, maze, oppositeDir) {
@@ -118,10 +134,10 @@ function getNewDirection(directions, x, y, maze, oppositeDir) {
 
   // we cycle through all directions and pick only the valid ones
   directions.forEach(dir => {
-    if ( !compareDirections(dir, oppositeDir) ) {
-      if( checkArrayBounds(x + dir[0], y + dir[1], maze.length) && checkNextCell(x + dir[0], y + dir[1], maze) ) {
-        validDirs.push(dir);
-      }
+    if (!compareDirections(dir, oppositeDir) &&
+        checkArrayBounds(x + dir[0], y + dir[1], maze.length) &&
+        checkNextCell(x + dir[0], y + dir[1], maze)) {
+      validDirs.push(dir);
     }
   });
 

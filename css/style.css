@@ -39,28 +39,34 @@ Retrieved 2026-02-01, License - CC BY-SA 3.0
 */
 
 /*Chrome*/
-@media screen and (-webkit-min-device-pixel-ratio:0) {
-  input[type='range'] {
-    overflow: hidden;
-    -webkit-appearance: none;
-  }
-  
-  input[type='range']::-webkit-slider-runnable-track {
-    height: 10px;
-    -webkit-appearance: none;
-    color: #13bba4;
-    margin-top: -1px;
-  }
-  
-  input[type='range']::-webkit-slider-thumb {
-    width: 10px;
-    -webkit-appearance: none;
-    height: 10px;
-    cursor: ew-resize;
-    background: #434343;
-    box-shadow: -80px 0 0 80px #43e5f7;
-  }
+input[type="range"]::-webkit-slider-runnable-track {
+  height: 4px;
+  background: var(--secondary-site-color);
+  border-radius: 999px;
 }
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 14px;
+  height: 14px;
+  background: #fff;
+  border: 2px solid var(--highlight-site-color);
+  border-radius: 50%;
+  cursor: pointer;
+
+  /* centers thumb vertically on the track */
+  margin-top: -5px;
+}
+input[type="range"] {
+  --progress: 50%;
+  background: linear-gradient(
+    to right,
+    var(--secondary-site-color) 0%,
+    var(--secondary-site-color) var(--progress),
+    #0000 var(--progress),
+    #0000 100%
+  );
+}
+
 /* FF */
 input[type="range"] {
   outline: none;
@@ -88,6 +94,8 @@ input[type="range"]::-moz-range-thumb {
 #main {
   width: 100vw;
   height: 100vh;
+
+  background: radial-gradient( ellipse at center, rgba(0, 0, 0, 0) 50%, rgba(0, 0, 0, 0.1) 80% );
 }
 #maze_container {
   background-color: var(--maze-bg-color);
@@ -114,16 +122,16 @@ input[type="range"]::-moz-range-thumb {
   display: inline;
 }
 #gen_maze_button {
+  color: var(--primary-bg-color);
+  background-color: var(--highlight-site-color);
   box-shadow: 0 0 5px 5px var(--shadow-color);
-  background-color: var(--secondary-site-color);
-  color: var(--primary-site-color);
   width: 140px;
   height: 40px;
+
+  transition: box-shadow 0.5s;
 }
 #gen_maze_button:hover {
-  background-color: var(--highlight-site-color);
-  color: var(--primary-bg-color);
-  box-shadow: 0 0 5px 5px var(--highlight-shadow-color);
+  box-shadow: 0 0 10px 10px var(--highlight-shadow-color);
 }
 
 .centered_content {
@@ -145,15 +153,17 @@ input[type="range"]::-moz-range-thumb {
   margin: 0 auto;
 }
 .button {
-  background-color: var(--primary-site-color);
-  color: var(--secondary-site-color);
+  background-color: var(--secondary-site-color);
+  color: var(--primary-site-color);
   border: none;
   border-radius: 10px;
+
+  transition: background-color 0.2s, color 0.2s, box-shadow 0.2s;
 }
 .button:hover {
   cursor: pointer;
-  background-color: var(--secondary-site-color);
-  color: var(--highlighted-text-color);
+  background-color: var(--highlight-site-color);
+  color: var(--secondary-site-color);
   box-shadow: 0 0 5px 5px var(--shadow-color);
 }
 .square_button {

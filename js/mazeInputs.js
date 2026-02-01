@@ -9,9 +9,11 @@ const show_gen = document.getElementById(show_gen_name);
 const default_speed = 100;
 const min_speed = 200;
 const min_size = 11;
-const max_size = 5001;
+const max_size = 501;
 
-var showGeneration = false;
+var showMazeGen = false;
+var stopMazeGen = false;
+var isMazeGenerating = false;
 var speed = gen_speed.value;
 var size = 25;
 
@@ -30,13 +32,17 @@ function handleSizeChange(change) {
   size_display.innerText = size;
 }
 
+function stopCurrentMazeGen() {
+  stopMazeGen = true;
+}
+
 function updateSpeed() {
   speed = min_speed - gen_speed.value;
 }
 
 function toggleShowGen() {
-  showGeneration = !showGeneration;
-  if (showGeneration) show_gen.innerText = "ON";
+  showMazeGen = !showMazeGen;
+  if (showMazeGen) show_gen.innerText = "ON";
   else show_gen.innerText = "OFF";
 }
 

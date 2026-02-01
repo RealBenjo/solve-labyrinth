@@ -38,12 +38,13 @@
             <p>maze visualization toggle</p>
             <button id="gen_show_input" class="button square_button" onclick="toggleShowGen()">OFF</button>
           </div>
-          <button id="gen_maze_button" class="button" onclick="makeMaze()">Generate Maze</button>
+          <button id="gen_maze_button" class="button" onclick="stopCurrentMazeGen(); makeMaze()">Generate Maze</button>
         </div>
       </div>
     </div>
     
     <script src="js/mazeInputs.js"></script>
     <script src="js/maze.js"></script>
+    <script src="js/inputStyle.js"></script>
   </div>
 </body>
