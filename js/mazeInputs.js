@@ -6,7 +6,8 @@ const size_display = document.getElementById(size_display_name);
 const gen_speed = document.getElementById(gen_speed_name);
 const show_gen = document.getElementById(show_gen_name);
 
-const min_size = 10;
+const min_speed = 200;
+const min_size = 11;
 
 var showGeneration = false;
 var speed = gen_speed.value;
@@ -17,12 +18,14 @@ size_display.innerText = size;
 function handleSizeChange(change) {
   if (size + change > min_size) {
     size += change;
+  } else {
+    size = min_size;
   }
   size_display.innerText = size;
 }
 
 function updateSpeed() {
-  speed = gen_speed.value;
+  speed = min_speed - gen_speed.value;
 }
 
 function toggleShowGen() {

@@ -95,46 +95,28 @@ async function generateMaze(maze, startX, startY) {
 
       if (showGen) {
         drawMaze(maze, size, cellSize);
-        await sleep(speed); // in miliseconds
+        await wait(speed); // in miliseconds
       }
     }
   }
 }
 
 function getNewDirection(directions, x, y, maze, oppositeDir) {
+  var validDirs = new Array();
 
-  // we start with a random direction
-  var firstDirIndex = Math.floor( Math.random() * directions.length );
-  var dir = directions[ firstDirIndex ];
-  oppositeDir = [ -dir[0], -dir[1] ];
-
-  // check if it is a valid direction
-  if (!compareDirections(dir, oppositeDir) && 
-      checkBounds(x + dir[0], y + dir[1], maze.length) &&
-      checkNextCell(x + dir[0], y + dir[1], maze) ) {
-    return dir;
-  }
-
-  // loops through every direction
-  for (var i = 0; i < directions.length; i++) {
-
-    // skip the first checked direction
-    if ( i == firstDirIndex) continue;
-
-    dir = directions[i];
-    oppositeDir = [ -dir[0], -dir[1] ];
-
-    // if a new direction is ok, we return that one
-    if (!compareDirections(dir, oppositeDir) && 
-    checkBounds(x + dir[0], y + dir[1], maze.length) &&
-    checkNextCell(x + dir[0], y + dir[1], maze) ) {
-      return dir;
+  directions.forEach(dir => {
+    if ( !compareDirections(dir, oppositeDir) ) {
+      if( checkBounds(x + dir[0], y + dir[1], maze.length) && checkNextCell(x + dir[0], y + dir[1], maze) ) {
+        validDirs.push(dir);
+      }
     }
+  });
+
+  if ( validDirs.length > 0 ) {
+    return validDirs[ Math.floor( Math.random() * validDirs.length ) ];
+  } else {
+    return [0, 0]; // this tells the algorithm there are no valid directions -> we backtrack
   }
-  
-  // if no directions were ok, we return an empty direction
-  // based on this info we backtrack in the maze to not get stuck
-  return [0, 0];
 }
 
 
@@ -192,35 +174,87 @@ function checkBounds(x, y, arrayLength) {
   return false;
 }
 
-function sleep(ms) {
+function wait(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
 
 
 
+// chatGPT code down here //
+
 function drawMaze(maze, size, cSize) {
-  // Clear canvas
+  // clear canvas
   ctx.fillStyle = "black";
   ctx.fillRect(0, 0, maze_canvas.width, maze_canvas.height);
-  
-  // Draw maze
-  for (var x = 0; x < size; x++) {
-    for (var y = 0; y < size; y++) {
-      if (maze[x][y] == true) {
-        ctx.fillStyle = "black"; // Wall
-      } else {
-        ctx.fillStyle = "white"; // Path
-      }
-      ctx.fillRect(x * cSize, y * cSize, cSize, cSize);
-      
-      // Mark start and end
-      if (x == start[0] && y == start[1]) {
-        ctx.fillStyle = "green";
-        ctx.fillRect(x * cSize, y * cSize, cSize, cSize);
 
-      } else if (x == end[0] && y == end[1]) {
-        ctx.fillStyle = "red";
-        ctx.fillRect(x * cSize, y * cSize, cSize, cSize);
+  drawHorizontalPaths(maze, size, cSize);
+  drawVerticalPaths(maze, size, cSize);
+
+  // start
+  ctx.fillStyle = "green";
+  ctx.fillRect(start[0] * cSize, start[1] * cSize, cSize, cSize);
+
+  // end
+  ctx.fillStyle = "red";
+  ctx.fillRect(end[0] * cSize, end[1] * cSize, cSize, cSize);
+}
+
+// MAZE RENDERING AUX //
+function drawHorizontalPaths(maze, size, cSize) {
+  ctx.fillStyle = "white";
+
+  for (let y = 0; y < size; y++) {
+    let x = 0;
+
+    while (x < size) {
+      if (maze[x][y] === false) {
+        let startX = x;
+
+        // extend to the right
+        while (x < size && maze[x][y] === false) {
+          x++;
+        }
+
+        let width = x - startX;
+
+        ctx.fillRect(
+          startX * cSize,
+          y * cSize,
+          width * cSize,
+          cSize
+        );
+      } else {
+        x++;
+      }
+    }
+  }
+}
+
+function drawVerticalPaths(maze, size, cSize) {
+  ctx.fillStyle = "white";
+
+  for (let x = 0; x < size; x++) {
+    let y = 0;
+
+    while (y < size) {
+      if (maze[x][y] === false) {
+        let startY = y;
+
+        // extend downward
+        while (y < size && maze[x][y] === false) {
+          y++;
+        }
+
+        let height = y - startY;
+
+        ctx.fillRect(
+          x * cSize,
+          startY * cSize,
+          cSize,
+          height * cSize
+        );
+      } else {
+        y++;
       }
     }
   }

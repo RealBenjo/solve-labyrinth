@@ -17,21 +17,24 @@
       <div id="maze_param_container" class="centered_content">
         <div id="param_container" class="col_dir">
           <div id="maze_size_param">
-            <button id="maze_size_minus" class="square_button" onclick="handleSizeChange(-2)">-</button>
+            <button id="maze_size_minus" class="square_button" onclick="handleSizeChange(-200)">-200</button>
+            <button id="maze_size_minus" class="square_button" onclick="handleSizeChange(-20)">-20</button>
+            <button id="maze_size_minus" class="square_button" onclick="handleSizeChange(-2)">-2</button>
             <p id="size_display" style="display: inline;"></p>
-            <button id="maze_size_plus" class="square_button" onclick="handleSizeChange(2)">+</button>
+            <button id="maze_size_plus" class="square_button" onclick="handleSizeChange(2)">+2</button>
+            <button id="maze_size_plus" class="square_button" onclick="handleSizeChange(20)">+20</button>
+            <button id="maze_size_plus" class="square_button" onclick="handleSizeChange(200)">+200</button>
           </div>
           
           <div id="maze_speed_param">
-            <input id="speed_input" type="range" min="10" max="200" step="10" oninput="updateSpeed()">
+            <input id="speed_input" type="range" min="0" max="199" step="1" oninput="updateSpeed()">
           </div>
           
           <div id="maze_generation_param">
-            <button id="gen_show_input" onclick="toggleShowGen()">OFF</button>
+            <button id="gen_show_input" class="square_button" onclick="toggleShowGen()">OFF</button>
           </div>
+          <button id="gen_maze_button" onclick="makeMaze()">Generate Maze</button>
         </div>
-
-        <button id="gen_maze_button" onclick="makeMaze()">Generate Maze</button>
       </div>
     </div>
     
