@@ -1,7 +1,16 @@
 /* ALL variables */
 :root {
-  --primary-bg-color: #10104a;
-  --primary-text-color: #f4e7f6;
+  --primary-bg-color: #4e0f43;
+
+  --primary-site-color: #f4e7f6;
+  --secondary-site-color: #8a0da6;
+
+  --highlight-site-color: #ff65f0;
+  --highlight-site-text-color: #4b0043;
+  --highlight-shadow-color: rgba(196, 27, 190, 0.555);
+  --highlighted-text-color: #f4e7f6;
+
+  --shadow-color: rgba(137, 28, 133, 0.437);
   --maze-bg-color: #000000;
 }
 
@@ -9,10 +18,72 @@
   margin: 0;
   padding: 0;
 }
+html {
+  width: 100vw;
+  height: 100vh;
+}
 body {
   background-color: var(--primary-bg-color);
-  color: var(--primary-text-color);
+  color: var(--primary-site-color);
+  width: 100vw;
+  height: 100vh;
+  font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+  font-size: 23px;
 }
+
+
+/*
+Source - https://stackoverflow.com/a/38163892
+Posted by deathangel908, modified by community. See post 'Timeline' for change history
+Retrieved 2026-02-01, License - CC BY-SA 3.0
+*/
+
+/*Chrome*/
+@media screen and (-webkit-min-device-pixel-ratio:0) {
+  input[type='range'] {
+    overflow: hidden;
+    -webkit-appearance: none;
+  }
+  
+  input[type='range']::-webkit-slider-runnable-track {
+    height: 10px;
+    -webkit-appearance: none;
+    color: #13bba4;
+    margin-top: -1px;
+  }
+  
+  input[type='range']::-webkit-slider-thumb {
+    width: 10px;
+    -webkit-appearance: none;
+    height: 10px;
+    cursor: ew-resize;
+    background: #434343;
+    box-shadow: -80px 0 0 80px #43e5f7;
+  }
+}
+/* FF */
+input[type="range"] {
+  outline: none;
+  background: none;
+}
+input[type="range"]::-moz-range-progress {
+  height: 4px;
+  background: var(--secondary-site-color);
+  border-radius: 999px;
+}
+input[type="range"]::-moz-range-track {
+  height: 4px;
+  background: var(--secondary-site-color);
+  border-radius: 999px;
+}
+/* the handle with which you drag it left and right */
+input[type="range"]::-moz-range-thumb {
+  background: #fff;
+  border: 2px solid var(--highlight-site-color);
+  border-radius: 50%;
+}
+
+
 
 #main {
   width: 100vw;
@@ -23,15 +94,47 @@ body {
   width: 550px;
   height: 550px;
 }
+#maze_size_param {
+  margin-top: 15px;
+  width: 100%;
+}
+#maze_canvas {
+  width: 90%;
+  height: 90%;
+}
 #param_container {
-  height: 100px;
+  height: 350px;
   width: 500px;
+  gap: 20px;
+}
+#size_container {
+  gap: 10px;
+}
+#size_display {
+  display: inline;
+}
+#gen_maze_button {
+  box-shadow: 0 0 5px 5px var(--shadow-color);
+  background-color: var(--secondary-site-color);
+  color: var(--primary-site-color);
+  width: 140px;
+  height: 40px;
+}
+#gen_maze_button:hover {
+  background-color: var(--highlight-site-color);
+  color: var(--primary-bg-color);
+  box-shadow: 0 0 5px 5px var(--highlight-shadow-color);
 }
 
 .centered_content {
   display: flex;
   align-items: center;
   justify-content: center;
+}
+.row_dir {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
 }
 .col_dir {
   display: flex;
@@ -41,11 +144,30 @@ body {
 .h_centered {
   margin: 0 auto;
 }
-.default_button {
-  width: 50px;
-  height: 30px;
+.button {
+  background-color: var(--primary-site-color);
+  color: var(--secondary-site-color);
+  border: none;
+  border-radius: 10px;
+}
+.button:hover {
+  cursor: pointer;
+  background-color: var(--secondary-site-color);
+  color: var(--highlighted-text-color);
+  box-shadow: 0 0 5px 5px var(--shadow-color);
 }
 .square_button {
   width: 50px;
   height: 50px;
+}
+
+@media (max-width = 600px) {
+  #maze_container {
+    width: 100vw;
+    height: 100vw;
+  }
+  #maze_canvas {
+    width: 90vw;
+    height: 90vw;
+  }
 }

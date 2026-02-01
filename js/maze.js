@@ -4,22 +4,28 @@ const maze_canvas = document.getElementById(maze_canvas_name);
 const ctx = maze_canvas.getContext("2d");
 
 const start = [0, 0];
+var canMazeGen = true
+var end = [size-1, size-1];
 var mazeSize = size;
-var end = [mazeSize-1, mazeSize-1];
+var start_to_end = distanceBetween(start[0], start[1], end[0], end[1]);
 
-var showGen = showGeneration;
+maze_canvas.width = 500;
+maze_canvas.height = 500;
 
 var cellSize;
 
-makeMaze(mazeSize); // make the maze at site start up
+makeMaze(); // make the maze at site start up
 
-function makeMaze() {
-
-  // take these inputs only when make maze is run
-  showGen = showGeneration;
+async function makeMaze() {
+  // if maze is being generated, prevent another one being generated
+  if (!canMazeGen) {
+    return;
+  } else {
+    mazeSize = size;
+    canMazeGen = false;
+  }
 
   // get the size value from user
-  mazeSize = size;
   end = [mazeSize-1, mazeSize-1];
 
   cellSize = maze_canvas.width / mazeSize;
@@ -33,18 +39,23 @@ function makeMaze() {
     }
   }
 
-  generateMaze(maze_matrix, start[0], start[1]);
+  await generateMaze(maze_matrix, start[0], start[1]);
   drawMaze(maze_matrix, mazeSize, cellSize);
+
+  canMazeGen = true;
 }
 
 async function generateMaze(maze, startX, startY) {
+  start_to_end = distanceBetween(start[0], start[1], end[0], end[1]);
+  
   var currentX = startX;
   var currentY = startY;
 
-  // stack is for backtracking
+  // prevMoves is for backtracking
   var prevMoves = [];
   
   // mark start cell as path
+  maze[startX][startY] = false;
   prevMoves.push([startX, startY]); // remember the first move
   
   var directions = [
@@ -79,11 +90,12 @@ async function generateMaze(maze, startX, startY) {
       currentX = prevCoords[0];
       currentY = prevCoords[1];
 
-    } else { // if the direction is in fact valid, we move there
+    } else { 
 
+      // if the direction is in fact valid, we move there
       currentX += dir[0];
       currentY += dir[1];
-  
+
       // we also save it in memory
       prevMoves.push([currentX, currentY]);
 
@@ -93,8 +105,8 @@ async function generateMaze(maze, startX, startY) {
       // set the current x and y coords as a walked path -> false / walkable
       maze[currentX][currentY] = false;
 
-      if (showGen) {
-        drawMaze(maze, size, cellSize);
+      if (showGeneration) {
+        drawMaze(maze, mazeSize, cellSize);
         await wait(speed); // in miliseconds
       }
     }
@@ -104,18 +116,20 @@ async function generateMaze(maze, startX, startY) {
 function getNewDirection(directions, x, y, maze, oppositeDir) {
   var validDirs = new Array();
 
+  // we cycle through all directions and pick only the valid ones
   directions.forEach(dir => {
     if ( !compareDirections(dir, oppositeDir) ) {
-      if( checkBounds(x + dir[0], y + dir[1], maze.length) && checkNextCell(x + dir[0], y + dir[1], maze) ) {
+      if( checkArrayBounds(x + dir[0], y + dir[1], maze.length) && checkNextCell(x + dir[0], y + dir[1], maze) ) {
         validDirs.push(dir);
       }
     }
   });
 
+  // if there are any valid directions, pick a random one
   if ( validDirs.length > 0 ) {
     return validDirs[ Math.floor( Math.random() * validDirs.length ) ];
   } else {
-    return [0, 0]; // this tells the algorithm there are no valid directions -> we backtrack
+    return [0, 0]; // otherwise, tell the algorithm to backtrack
   }
 }
 
@@ -123,10 +137,6 @@ function getNewDirection(directions, x, y, maze, oppositeDir) {
 
 // AUX //
 function checkNextCell(nextX, nextY, maze) {
-  // this line could probably be avoided
-  // but i don't how to fix the maze looping on itself (if it gets to the starting coordinates) in a cleaner way.
-  // oh well...
-  if (nextX == start[0] && nextY == start[1]) return false;
   return maze[nextX][nextY] == true;
 }
 
@@ -168,10 +178,13 @@ function compareDirections(dir1, dir2) {
   return dir1[0] == dir2[0] && dir1[1] == dir2[1];
 }
 
-// simple array border check
-function checkBounds(x, y, arrayLength) {
+function checkArrayBounds(x, y, arrayLength) {
   if (x >= 0 && y >= 0 && x < arrayLength && y < arrayLength) return true;
   return false;
+}
+
+function distanceBetween(x1,y1, x2,y2) {
+  return Math.sqrt( Math.pow( x2-x1, 2 ) + Math.pow( y2-y1, 2 ) );
 }
 
 function wait(ms) {
@@ -182,13 +195,15 @@ function wait(ms) {
 
 // chatGPT code down here //
 
-function drawMaze(maze, size, cSize) {
+function drawMaze(maze, mSize, cSize) {
   // clear canvas
   ctx.fillStyle = "black";
   ctx.fillRect(0, 0, maze_canvas.width, maze_canvas.height);
 
-  drawHorizontalPaths(maze, size, cSize);
-  drawVerticalPaths(maze, size, cSize);
+  // paths
+  ctx.fillStyle = "white";
+  drawHorizontalPaths(maze, mSize, cSize);
+  drawVerticalPaths(maze, mSize, cSize);
 
   // start
   ctx.fillStyle = "green";
@@ -200,29 +215,22 @@ function drawMaze(maze, size, cSize) {
 }
 
 // MAZE RENDERING AUX //
-function drawHorizontalPaths(maze, size, cSize) {
-  ctx.fillStyle = "white";
-
-  for (let y = 0; y < size; y++) {
+function drawHorizontalPaths(maze, mSize, cSize) {
+  for (let y = 0; y < mSize; y++) {
     let x = 0;
 
-    while (x < size) {
-      if (maze[x][y] === false) {
+    while (x < mSize) {
+      if (maze[x][y] == false) {
         let startX = x;
 
         // extend to the right
-        while (x < size && maze[x][y] === false) {
+        while (x < mSize && maze[x][y] == false) {
           x++;
         }
 
         let width = x - startX;
 
-        ctx.fillRect(
-          startX * cSize,
-          y * cSize,
-          width * cSize,
-          cSize
-        );
+        ctx.fillRect(startX * cSize, y * cSize, width * cSize, cSize);
       } else {
         x++;
       }
@@ -230,29 +238,22 @@ function drawHorizontalPaths(maze, size, cSize) {
   }
 }
 
-function drawVerticalPaths(maze, size, cSize) {
-  ctx.fillStyle = "white";
-
-  for (let x = 0; x < size; x++) {
+function drawVerticalPaths(maze, mSize, cSize) {
+  for (let x = 0; x < mSize; x++) {
     let y = 0;
 
-    while (y < size) {
-      if (maze[x][y] === false) {
+    while (y < mSize) {
+      if (maze[x][y] == false) {
         let startY = y;
 
         // extend downward
-        while (y < size && maze[x][y] === false) {
+        while (y < mSize && maze[x][y] == false) {
           y++;
         }
 
         let height = y - startY;
 
-        ctx.fillRect(
-          x * cSize,
-          startY * cSize,
-          cSize,
-          height * cSize
-        );
+        ctx.fillRect(x * cSize, startY * cSize, cSize, height * cSize);
       } else {
         y++;
       }

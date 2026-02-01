@@ -11,29 +11,34 @@
   <div id="main">
     <div id="maze_stuff">
       <div id="maze_container" class="h_centered centered_content">
-        <canvas id="maze_canvas" width="500px" height="500px">if you see this text, the canvas did not load correctly</canvas>
+        <canvas id="maze_canvas">if you see this text, the canvas did not load correctly</canvas>
       </div>
       
       <div id="maze_param_container" class="centered_content">
         <div id="param_container" class="col_dir">
           <div id="maze_size_param">
-            <button id="maze_size_minus" class="square_button" onclick="handleSizeChange(-200)">-200</button>
-            <button id="maze_size_minus" class="square_button" onclick="handleSizeChange(-20)">-20</button>
-            <button id="maze_size_minus" class="square_button" onclick="handleSizeChange(-2)">-2</button>
-            <p id="size_display" style="display: inline;"></p>
-            <button id="maze_size_plus" class="square_button" onclick="handleSizeChange(2)">+2</button>
-            <button id="maze_size_plus" class="square_button" onclick="handleSizeChange(20)">+20</button>
-            <button id="maze_size_plus" class="square_button" onclick="handleSizeChange(200)">+200</button>
+            <p class="h_centered" style="width: max-content;">maze size</p>
+            <div id="size_container" class="centered_content">
+              <button id="maze_size_minus" class="button square_button" onclick="handleSizeChange(-200)">-200</button>
+              <button id="maze_size_minus" class="button square_button" onclick="handleSizeChange(-20)">-20</button>
+              <button id="maze_size_minus" class="button square_button" onclick="handleSizeChange(-2)">-2</button>
+              <div style="width: 50px;" class="centered_content"><p id="size_display"></p></div>
+              <button id="maze_size_plus" class="button square_button" onclick="handleSizeChange(2)">+2</button>
+              <button id="maze_size_plus" class="button square_button" onclick="handleSizeChange(20)">+20</button>
+              <button id="maze_size_plus" class="button square_button" onclick="handleSizeChange(200)">+200</button>
+            </div>
           </div>
           
-          <div id="maze_speed_param">
+          <div id="maze_speed_param" class="col_dir">
+            <p>maze visualization speed</p>
             <input id="speed_input" type="range" min="0" max="199" step="1" oninput="updateSpeed()">
           </div>
           
-          <div id="maze_generation_param">
-            <button id="gen_show_input" class="square_button" onclick="toggleShowGen()">OFF</button>
+          <div id="maze_generation_param" class="col_dir">
+            <p>maze visualization toggle</p>
+            <button id="gen_show_input" class="button square_button" onclick="toggleShowGen()">OFF</button>
           </div>
-          <button id="gen_maze_button" onclick="makeMaze()">Generate Maze</button>
+          <button id="gen_maze_button" class="button" onclick="makeMaze()">Generate Maze</button>
         </div>
       </div>
     </div>
