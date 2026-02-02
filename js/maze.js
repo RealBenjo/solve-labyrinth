@@ -14,7 +14,6 @@ maze_canvas.height = 500;
 
 var cellSize;
 var currentGeneration = 0; // increment to cancel running generation
-var isMazeGenerating = false;
 
 function stopCurrentMazeGen() {
   // bump generation id to cancel any running generation and allow a new one
@@ -86,7 +85,6 @@ async function generateMaze(maze, startX, startY, genId) {
   while (prevMoves.length > 0) {
     // if another generation was requested, abort this run
     if (genId !== currentGeneration) return;
-    isMazeGenerating = true;
 
 
     var prevCoords; // used for backtracking
@@ -126,7 +124,6 @@ async function generateMaze(maze, startX, startY, genId) {
       }
     }
   }
-  isMazeGenerating = false;
 }
 
 function getNewDirection(directions, x, y, maze, oppositeDir) {
@@ -213,11 +210,11 @@ function wait(ms) {
 
 function drawMaze(maze, mSize, cSize) {
   // clear canvas
-  ctx.fillStyle = "black";
+  ctx.fillStyle = m_wall_color;
   ctx.fillRect(0, 0, maze_canvas.width, maze_canvas.height);
 
   // paths
-  ctx.fillStyle = "white";
+  ctx.fillStyle = m_path_color;
   drawHorizontalPaths(maze, mSize, cSize);
   drawVerticalPaths(maze, mSize, cSize);
 

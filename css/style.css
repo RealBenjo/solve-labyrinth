@@ -11,8 +11,13 @@
   --highlighted-text-color: #f4e7f6;
 
   --shadow-color: rgba(137, 28, 133, 0.437);
-  --maze-bg-color: #000000;
+  
+  --maze-path-color: #fce9ff;
+  --maze-wall-color: #1e001b;
 }
+/* for javascript to get the colors */
+#m_path_color { color: var(--maze-path-color); }
+#m_wall_color { color: var(--maze-wall-color); }
 
 * {
   margin: 0;
@@ -32,12 +37,7 @@ body {
 }
 
 
-/*
-Source - https://stackoverflow.com/a/38163892
-Posted by deathangel908, modified by community. See post 'Timeline' for change history
-Retrieved 2026-02-01, License - CC BY-SA 3.0
-*/
-
+/* slider styling (why is it so bad and not standardized???) */
 /*Chrome*/
 input[type="range"]::-webkit-slider-runnable-track {
   height: 4px;
@@ -98,7 +98,7 @@ input[type="range"]::-moz-range-thumb {
   background: radial-gradient( ellipse at center, rgba(0, 0, 0, 0) 50%, rgba(0, 0, 0, 0.1) 80% );
 }
 #maze_container {
-  background-color: var(--maze-bg-color);
+  background-color: var(--maze-wall-color);
   width: 550px;
   height: 550px;
 }
@@ -119,6 +119,7 @@ input[type="range"]::-moz-range-thumb {
   gap: 10px;
 }
 #size_display {
+  font-size: larger;
   display: inline;
 }
 #gen_maze_button {
