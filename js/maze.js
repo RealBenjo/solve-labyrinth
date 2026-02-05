@@ -4,6 +4,7 @@ const maze_canvas = document.getElementById(maze_canvas_name);
 const ctx = maze_canvas.getContext("2d");
 
 const start = [0, 0];
+const mazeEndBias = 0.0; // needs to be between 0.0 - 1.0
 var canMazeGen = true
 var end = [size-1, size-1];
 var mazeSize = size;
@@ -33,7 +34,7 @@ async function makeMaze() {
   
   // get the size value from user
   end = [mazeSize-1, mazeSize-1];
-
+  
   cellSize = maze_canvas.width / mazeSize;
   
   // create matrix and fill it with walls (true = wall, false = path)
@@ -44,7 +45,7 @@ async function makeMaze() {
       maze_matrix[i][j] = true; // start with all walls
     }
   }
-
+  
   // start generation: bump id so older runs stop, capture id for this run
   const myGenId = ++currentGeneration;
   await generateMaze(maze_matrix, start[0], start[1], myGenId);
@@ -86,12 +87,11 @@ async function generateMaze(maze, startX, startY, genId) {
     // if another generation was requested, abort this run
     if (genId !== currentGeneration) return;
 
-
     var prevCoords; // used for backtracking
 
     // inverts the previous valid direction
     var oppositeDir = [ -dir[0], -dir[1] ];
-    dir = getNewDirection(directions, currentX, currentY, maze, oppositeDir);
+    dir = getNewDirection(directions, currentX, currentY, maze);
 
     // check if the direction we are given is "empty" (aka: [0,0] )
     if ( dir[0] == 0 && dir[1] == 0 ) {
@@ -107,7 +107,6 @@ async function generateMaze(maze, startX, startY, genId) {
       // if the direction is in fact valid, we move there
       currentX += dir[0];
       currentY += dir[1];
-
       // we also save it in memory
       prevMoves.push([currentX, currentY]);
 
@@ -117,30 +116,47 @@ async function generateMaze(maze, startX, startY, genId) {
       // set the current x and y coords as a walked path -> false / walkable
       maze[currentX][currentY] = false;
 
+      
+      
       if (typeof showMazeGen !== 'undefined' ? showMazeGen : false) {
         drawMaze(maze, mazeSize, cellSize);
         await wait(speed); // in miliseconds
         if (genId !== currentGeneration) return;
       }
     }
+    if ( currentX == end[0] && currentY == end[1] ) {
+      currentX = prevMoves[ Math.floor( Math.random() * prevMoves.length ) ][0];
+      currentY = prevMoves[ Math.floor( Math.random() * prevMoves.length ) ][1];
+    }
   }
 }
 
-function getNewDirection(directions, x, y, maze, oppositeDir) {
-  var validDirs = new Array();
+function getNewDirection(directions, x, y, maze) {
+  var biasedDirs = new Array();
+  var otherDirs = new Array();
 
   // we cycle through all directions and pick only the valid ones
   directions.forEach(dir => {
-    if (!compareDirections(dir, oppositeDir) &&
-        checkArrayBounds(x + dir[0], y + dir[1], maze.length) &&
+    if (checkArrayBounds(x + dir[0], y + dir[1], maze.length) &&
         checkNextCell(x + dir[0], y + dir[1], maze)) {
-      validDirs.push(dir);
+      
+      // we check if the next pos is closer to the end than the current pos
+      if ( distanceBetween([x,y], end) > distanceBetween([x + dir[0], y + dir[1]], end) ) {
+        biasedDirs.push(dir);
+      } 
+      otherDirs.push(dir);
     }
   });
 
-  // if there are any valid directions, pick a random one
-  if ( validDirs.length > 0 ) {
-    return validDirs[ Math.floor( Math.random() * validDirs.length ) ];
+
+  // have a bias for going towards the end of the maze (if you can even move there)
+  if ( mazeEndBias > Math.random() && biasedDirs.length > 0 ) {
+    return biasedDirs[ Math.floor( Math.random() * biasedDirs.length ) ];
+
+  // otherwise just move to another random direction
+  } else if ( otherDirs.length > 0 ) {
+    return otherDirs[ Math.floor( Math.random() * otherDirs.length ) ];
+
   } else {
     return [0, 0]; // otherwise, tell the algorithm to backtrack
   }
@@ -196,8 +212,8 @@ function checkArrayBounds(x, y, arrayLength) {
   return false;
 }
 
-function distanceBetween(x1,y1, x2,y2) {
-  return Math.sqrt( Math.pow( x2-x1, 2 ) + Math.pow( y2-y1, 2 ) );
+function distanceBetween(pos1, pos2) {
+  return Math.sqrt( Math.pow( pos2[0]-pos1[0], 2 ) + Math.pow( pos2[1]-pos1[1], 2 ) );
 }
 
 function wait(ms) {
