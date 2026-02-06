@@ -26,6 +26,8 @@
 html {
   width: 100vw;
   height: 100vh;
+
+  background-color: var(--primary-bg-color);
 }
 body {
   background-color: var(--primary-bg-color);
@@ -97,8 +99,19 @@ input[type="range"]::-moz-range-thumb {
 
   background: radial-gradient( ellipse at center, rgba(0, 0, 0, 0) 50%, rgba(0, 0, 0, 0.1) 80% );
 }
+#header {
+  height: 80px;
+  margin-bottom: 60px;
+}
+#maze_stuff {
+  width: 1000px;
+}
+#maze_param_container {
+  height: 100%;
+}
 #maze_container {
   background-color: var(--maze-wall-color);
+  float: left;
   width: 550px;
   height: 550px;
 }
@@ -111,9 +124,7 @@ input[type="range"]::-moz-range-thumb {
   height: 90%;
 }
 #param_container {
-  height: 350px;
-  width: 500px;
-  gap: 20px;
+  gap: 50px;
 }
 #size_container {
   gap: 10px;
