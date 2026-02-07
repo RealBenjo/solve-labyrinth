@@ -4,7 +4,7 @@ const maze_canvas = document.getElementById(maze_canvas_name);
 const ctx = maze_canvas.getContext("2d");
 
 const start = [0, 0];
-const mazeEndBias = 0.0; // needs to be between 0.0 - 1.0
+const mazeEndBias = 0.3; // needs to be between 0.0 - 1.0
 var canMazeGen = true
 var end = [size-1, size-1];
 var mazeSize = size;
@@ -61,11 +61,11 @@ async function generateMaze(maze, startX, startY, genId) {
   var currentY = startY;
 
   // prevMoves is for backtracking
-  var prevMoves = [];
+  var allMoves = [];
   
   // mark start cell as path
   maze[startX][startY] = false;
-  prevMoves.push([startX, startY]); // remember the first move
+  allMoves.push([startX, startY]); // remember the first move
   
   var directions = [
     [0, -2], // up
@@ -83,24 +83,24 @@ async function generateMaze(maze, startX, startY, genId) {
   var dir = directions[2];
 
   // when we backtrack to the start we end the algorithm
-  while (prevMoves.length > 0) {
+  while (allMoves.length > 0) {
     // if another generation was requested, abort this run
     if (genId !== currentGeneration) return;
 
-    var prevCoords; // used for backtracking
+    var newCoords = new Array(); // used for backtracking
 
     // inverts the previous valid direction
-    var oppositeDir = [ -dir[0], -dir[1] ];
     dir = getNewDirection(directions, currentX, currentY, maze);
 
     // check if the direction we are given is "empty" (aka: [0,0] )
-    if ( dir[0] == 0 && dir[1] == 0 ) {
+    if ( dir == null ) {
       // if so, we know the direction was invalid and we need to backtrack
-      prevCoords = prevMoves.pop();
+      newCoords = allMoves[0];
+      allMoves.splice(0, 1);
 
       // we backtrack here:
-      currentX = prevCoords[0];
-      currentY = prevCoords[1];
+      currentX = newCoords[0];
+      currentY = newCoords[1];
 
     } else { 
 
@@ -108,7 +108,7 @@ async function generateMaze(maze, startX, startY, genId) {
       currentX += dir[0];
       currentY += dir[1];
       // we also save it in memory
-      prevMoves.push([currentX, currentY]);
+      allMoves.push([currentX, currentY]);
 
       // set the inbetween path to false also
       maze = fillTheBlanks(dir, currentX, currentY, maze);
@@ -123,10 +123,6 @@ async function generateMaze(maze, startX, startY, genId) {
         await wait(speed); // in miliseconds
         if (genId !== currentGeneration) return;
       }
-    }
-    if ( currentX == end[0] && currentY == end[1] ) {
-      currentX = prevMoves[ Math.floor( Math.random() * prevMoves.length ) ][0];
-      currentY = prevMoves[ Math.floor( Math.random() * prevMoves.length ) ][1];
     }
   }
 }
@@ -143,22 +139,23 @@ function getNewDirection(directions, x, y, maze) {
       // we check if the next pos is closer to the end than the current pos
       if ( distanceBetween([x,y], end) > distanceBetween([x + dir[0], y + dir[1]], end) ) {
         biasedDirs.push(dir);
-      } 
+      }
+
       otherDirs.push(dir);
     }
   });
 
-
-  // have a bias for going towards the end of the maze (if you can even move there)
   if ( mazeEndBias > Math.random() && biasedDirs.length > 0 ) {
-    return biasedDirs[ Math.floor( Math.random() * biasedDirs.length ) ];
-
-  // otherwise just move to another random direction
+    console.log("biased");
+    return biasedDirs[ Math.floor( Math.random() * otherDirs.length ) ];
+  
+  // move to another random direction
   } else if ( otherDirs.length > 0 ) {
+    console.log("other");
     return otherDirs[ Math.floor( Math.random() * otherDirs.length ) ];
 
   } else {
-    return [0, 0]; // otherwise, tell the algorithm to backtrack
+    return null; // otherwise, tell the algorithm to backtrack
   }
 }
 
