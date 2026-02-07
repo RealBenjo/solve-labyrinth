@@ -14,10 +14,12 @@
   
   --maze-path-color: #fce9ff;
   --maze-wall-color: #1e001b;
+  --maze-solution-color: #ff6969;
 }
 /* for javascript to get the colors */
 #m_path_color { color: var(--maze-path-color); }
 #m_wall_color { color: var(--maze-wall-color); }
+#m_solution_color { color: var(--maze-solution-color); }
 
 * {
   margin: 0;
@@ -134,16 +136,12 @@ input[type="range"]::-moz-range-thumb {
   display: inline;
 }
 #gen_maze_button {
-  color: var(--primary-bg-color);
-  background-color: var(--highlight-site-color);
-  box-shadow: 0 0 5px 5px var(--shadow-color);
   width: 140px;
   height: 40px;
-
-  transition: box-shadow 0.5s;
 }
-#gen_maze_button:hover {
-  box-shadow: 0 0 10px 10px var(--highlight-shadow-color);
+#solve_maze_button {
+  width: 100px;
+  height: 40px;
 }
 
 .centered_content {
@@ -177,6 +175,16 @@ input[type="range"]::-moz-range-thumb {
   background-color: var(--highlight-site-color);
   color: var(--secondary-site-color);
   box-shadow: 0 0 5px 5px var(--shadow-color);
+}
+.hot_button {
+  color: var(--primary-bg-color);
+  background-color: var(--highlight-site-color);
+  box-shadow: 0 0 5px 5px var(--shadow-color);
+  transition: box-shadow 0.5s;
+}
+.hot_button:hover {
+  box-shadow: 0 0 10px 10px var(--highlight-shadow-color);
+  color: var(--primary-bg-color);
 }
 .square_button {
   width: 50px;

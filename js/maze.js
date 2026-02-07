@@ -13,6 +13,8 @@ var start_to_end = distanceBetween(start[0], start[1], end[0], end[1]);
 maze_canvas.width = 500;
 maze_canvas.height = 500;
 
+var maze_matrix = new Array();
+
 var cellSize;
 var currentGeneration = 0; // increment to cancel running generation
 
@@ -38,7 +40,7 @@ async function makeMaze() {
   cellSize = maze_canvas.width / mazeSize;
   
   // create matrix and fill it with walls (true = wall, false = path)
-  var maze_matrix = new Array(mazeSize);
+  maze_matrix = new Array(mazeSize);
   for (var i = 0; i < mazeSize; i++) {
     maze_matrix[i] = new Array(mazeSize);
     for (var j = 0; j < mazeSize; j++) {

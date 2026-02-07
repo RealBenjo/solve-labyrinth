@@ -1,6 +1,8 @@
 // names of the needed HTML elements
 const m_path_color_div_name = "m_path_color";
 const m_wall_color_div_name = "m_wall_color";
+const m_solution_color_div_name = "m_solution_color";
+
 const size_display_name = "size_display";
 const gen_speed_name = "speed_input";
 const show_gen_name = "gen_show_input";
@@ -15,6 +17,7 @@ const show_gen = document.getElementById(show_gen_name);
 // colors from css
 const m_path_color = getComputedStyle( document.getElementById(m_path_color_div_name) ).getPropertyValue("--maze-path-color");
 const m_wall_color = getComputedStyle( document.getElementById(m_wall_color_div_name) ).getPropertyValue("--maze-wall-color");
+const m_solution_color = getComputedStyle( document.getElementById(m_solution_color_div_name) ).getPropertyValue("--maze-solution-color");
 
 // maze default parameters
 const default_speed = 100;

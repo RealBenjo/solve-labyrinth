@@ -12,6 +12,7 @@
   <div style="display: none;">
     <div id="m_path_color">maze path color</div>
     <div id="m_wall_color">maze wall color</div>
+    <div id="m_solution_color">maze solution color</div>
   </div>
 
   <!-- actual site -->
@@ -49,13 +50,19 @@
             <p>maze visualization toggle</p>
             <button id="gen_show_input" class="button square_button" onclick="toggleShowGen()">OFF</button>
           </div>
-          <button id="gen_maze_button" class="button" onclick="stopCurrentMazeGen(); makeMaze()">Generate Maze</button>
+
+          <div>
+            <button id="gen_maze_button" class="button hot_button" onclick="stopCurrentMazeGen(); makeMaze()">Generate Maze</button>
+            <button id="solve_maze_button" class="button hot_button" onclick="pathFind()">Solve Maze</button>
+          </div>
         </div>
       </div>
     </div>
     
     <script src="js/mazeInputs.js"></script>
-    <script src="js/maze.js"></script>
     <script src="js/inputStyle.js"></script>
+    <script src="js/pathfinding-bower-0.4.18/pathfinding-browser.js"></script>
+    <script src="js/maze.js"></script>
+    <script src="js/pathFinding.js"></script>
   </div>
 </body>
