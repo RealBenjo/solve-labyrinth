@@ -79,22 +79,19 @@ async function generateMaze(maze, startX, startY, genId) {
 
   // actual maze algorithm stuff //
 
-  // this does not actually force the maze in a downwards start, don't worry
-  var dir = directions[2];
-
   // when we backtrack to the start we end the algorithm
   while (allMoves.length > 0) {
     // if another generation was requested, abort this run
     if (genId !== currentGeneration) return;
 
+
     var newCoords = new Array(); // used for backtracking
 
-    // inverts the previous valid direction
     dir = getNewDirection(directions, currentX, currentY, maze);
 
-    // check if the direction we are given is "empty" (aka: [0,0] )
+    // check if the direction we are given is null
     if ( dir == null ) {
-      // if so, we know the direction was invalid and we need to backtrack
+      // if so, we know we need to go back (from start -> end)
       newCoords = allMoves[0];
       allMoves.splice(0, 1);
 
@@ -146,12 +143,10 @@ function getNewDirection(directions, x, y, maze) {
   });
 
   if ( mazeEndBias > Math.random() && biasedDirs.length > 0 ) {
-    console.log("biased");
     return biasedDirs[ Math.floor( Math.random() * otherDirs.length ) ];
   
   // move to another random direction
   } else if ( otherDirs.length > 0 ) {
-    console.log("other");
     return otherDirs[ Math.floor( Math.random() * otherDirs.length ) ];
 
   } else {
@@ -242,7 +237,7 @@ function drawMaze(maze, mSize, cSize) {
 
 // MAZE RENDERING AUX //
 function drawHorizontalPaths(maze, mSize, cSize) {
-  for (let y = 0; y < mSize; y++) {
+  for (let y = 0; y < mSize; y+=2) {
     let x = 0;
 
     while (x < mSize) {
@@ -265,7 +260,7 @@ function drawHorizontalPaths(maze, mSize, cSize) {
 }
 
 function drawVerticalPaths(maze, mSize, cSize) {
-  for (let x = 0; x < mSize; x++) {
+  for (let x = 0; x < mSize; x+=2) {
     let y = 0;
 
     while (y < mSize) {
