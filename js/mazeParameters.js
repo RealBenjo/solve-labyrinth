@@ -21,10 +21,15 @@ const maze_canvas = document.getElementById(maze_canvas_name);
 const ctx = maze_canvas.getContext("2d");
 const player_canvas = document.getElementById(player_canvas_name);
 const playerCtx = player_canvas.getContext("2d");
-player_canvas.width = 500;
-player_canvas.height = 500;
-path_canvas.width = 500;
-path_canvas.height = 500;
+
+const mazeCanvasSize = 500; // self explanatory
+
+maze_canvas.width = mazeCanvasSize;
+maze_canvas.height = mazeCanvasSize;
+player_canvas.width = mazeCanvasSize;
+player_canvas.height = mazeCanvasSize;
+path_canvas.width = mazeCanvasSize;
+path_canvas.height = mazeCanvasSize;
 
 // colors from css
 const m_path_color = getComputedStyle( document.getElementById(m_path_color_div_name) ).getPropertyValue("--maze-path-color");
@@ -44,6 +49,7 @@ var stopMazeGen = false;
 var isMazeGenerating = false;
 var speed = gen_speed.value;
 var size = 25;
+var showSolution = false; // used in pathFinding.js
 
 // set the display elements to default parameters
 size_display.innerText = size;

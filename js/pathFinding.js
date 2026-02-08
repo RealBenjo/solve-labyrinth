@@ -1,5 +1,3 @@
-var showSolution = false;
-
 function pathFind() {
   var grid = new PF.Grid(maze_matrix);
   var pathFinder = new PF.AStarFinder();

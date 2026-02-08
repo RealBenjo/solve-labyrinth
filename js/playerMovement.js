@@ -48,8 +48,10 @@ function checkInput() {
       !checkNextPlayerCell(playerX + dir[0], playerY + dir[1], maze_matrix) ) {
     playerX += dir[0];
     playerY += dir[1];
-    
-    drawPlayer();
+
+    if ( playerX == end[0] && playerY == end[1] ) {
+      
+    }
   }
 }
 
@@ -62,6 +64,19 @@ function checkArrBounds(x, y, arrayLength) {
   if (x >= 0 && y >= 0 && x < arrayLength && y < arrayLength) return true;
   return false;
 }
+
+function animatePlayer() {
+  const speed = 0.2; // animation smoothness (0.1 - 0.3 good)
+
+  renderX += (playerX - renderX) * speed;
+  renderY += (playerY - renderY) * speed;
+
+  drawPlayer();
+
+  requestAnimationFrame(animatePlayer);
+}
+
+animatePlayer();
 
 
 

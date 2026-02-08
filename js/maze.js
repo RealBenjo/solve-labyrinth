@@ -8,9 +8,8 @@ var start_to_end = distanceBetween(start[0], start[1], end[0], end[1]);
 // player coordinates
 var playerX = start[0];
 var playerY = start[1];
-
-maze_canvas.width = 500;
-maze_canvas.height = 500;
+let renderX = playerX;
+let renderY = playerY;
 
 var maze_matrix = new Array();
 
@@ -33,6 +32,9 @@ async function makeMaze() {
     mazeSize = size;
     canMazeGen = false;
   }
+
+  // by default we don't want the user to see the solution to the maze
+  showSolution = false;
   
   pathCtx.clearRect(0, 0, path_canvas.width, path_canvas.height);
   playerX = start[0];
@@ -220,17 +222,18 @@ function wait(ms) {
 
 function drawPlayer() {
   playerCtx.clearRect(0, 0, player_canvas.width, player_canvas.height);
+
   playerCtx.beginPath();
   playerCtx.arc(
-    playerX * cellSize + cellSize / 2,
-    playerY * cellSize + cellSize / 2,
+    renderX * cellSize + cellSize / 2,
+    renderY * cellSize + cellSize / 2,
     cellSize / 3,
-    0, 
-    2 * Math.PI);
-  
+    0,
+    2 * Math.PI
+  );
+
   playerCtx.fillStyle = m_player_color;
   playerCtx.fill();
-  console.log("player drawn");
 }
 
 
@@ -258,7 +261,7 @@ function drawMaze(maze, mSize, cSize) {
 
 // MAZE RENDERING AUX //
 function drawHorizontalPaths(maze, mSize, cSize) {
-  for (let y = 0; y < mSize; y+=2) {
+  for (let y = 0; y < mSize; y++) {
     let x = 0;
 
     while (x < mSize) {
@@ -281,7 +284,7 @@ function drawHorizontalPaths(maze, mSize, cSize) {
 }
 
 function drawVerticalPaths(maze, mSize, cSize) {
-  for (let x = 0; x < mSize; x+=2) {
+  for (let x = 0; x < mSize; x++) {
     let y = 0;
 
     while (y < mSize) {
