@@ -1,14 +1,13 @@
-const maze_canvas_name = "maze_canvas";
-
-const maze_canvas = document.getElementById(maze_canvas_name);
-const ctx = maze_canvas.getContext("2d");
-
 const start = [0, 0];
 const mazeEndBias = 0.3; // needs to be between 0.0 - 1.0
 var canMazeGen = true
 var end = [size-1, size-1];
 var mazeSize = size;
 var start_to_end = distanceBetween(start[0], start[1], end[0], end[1]);
+
+// player coordinates
+var playerX = start[0];
+var playerY = start[1];
 
 maze_canvas.width = 500;
 maze_canvas.height = 500;
@@ -25,6 +24,7 @@ function stopCurrentMazeGen() {
 }
 
 makeMaze(); // make the maze at site start up
+drawPlayer(); // draw the player at site start up
 async function makeMaze() {
   // if maze is being generated, prevent another one being generated
   if (!canMazeGen) {
@@ -34,6 +34,10 @@ async function makeMaze() {
     canMazeGen = false;
   }
   
+  pathCtx.clearRect(0, 0, path_canvas.width, path_canvas.height);
+  playerX = start[0];
+  playerY = start[1];
+
   // get the size value from user
   end = [mazeSize-1, mazeSize-1];
   
@@ -212,6 +216,21 @@ function distanceBetween(pos1, pos2) {
 
 function wait(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+function drawPlayer() {
+  playerCtx.clearRect(0, 0, player_canvas.width, player_canvas.height);
+  playerCtx.beginPath();
+  playerCtx.arc(
+    playerX * cellSize + cellSize / 2,
+    playerY * cellSize + cellSize / 2,
+    cellSize / 3,
+    0, 
+    2 * Math.PI);
+  
+  playerCtx.fillStyle = m_player_color;
+  playerCtx.fill();
+  console.log("player drawn");
 }
 
 

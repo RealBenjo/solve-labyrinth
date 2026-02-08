@@ -1,3 +1,5 @@
+var showSolution = false;
+
 function pathFind() {
   var grid = new PF.Grid(maze_matrix);
   var pathFinder = new PF.AStarFinder();
@@ -9,10 +11,19 @@ function pathFind() {
   drawSolution(path, cellSize);
 }
 
+function toggleSolution() {
+  showSolution = !showSolution;
+}
+
 function drawSolution(path, cSize) {
+  if (!showSolution) {
+    pathCtx.clearRect(0, 0, path_canvas.width, path_canvas.height);
+    return;
+  }
+
   var offset = cSize * 0.3;
 
-  ctx.fillStyle = m_solution_color;
+  pathCtx.fillStyle = m_solution_color;
 
   let startX = path[0][1];
   let startY = path[0][0];
@@ -34,7 +45,7 @@ function drawSolution(path, cSize) {
     // direction changed → draw segment
     if (newDirX !== dirX || newDirY !== dirY) {
 
-      ctx.fillRect(
+      pathCtx.fillRect(
         Math.min(startX, prevX) * cSize + offset,
         Math.min(startY, prevY) * cSize + offset,
         (Math.abs(prevX - startX) + 1) * cSize - offset * 2,
@@ -53,7 +64,7 @@ function drawSolution(path, cSize) {
   }
 
   // draw last segment
-  ctx.fillRect(
+  pathCtx.fillRect(
     Math.min(startX, prevX) * cSize + offset,
     Math.min(startY, prevY) * cSize + offset,
     (Math.abs(prevX - startX) + 1) * cSize - offset * 2,
@@ -61,11 +72,10 @@ function drawSolution(path, cSize) {
   );
 
   // start
-  ctx.fillStyle = "green";
-  ctx.fillRect(start[0] * cSize, start[1] * cSize, cSize, cSize);
+  pathCtx.fillStyle = "green";
+  pathCtx.fillRect(start[0] * cSize, start[1] * cSize, cSize, cSize);
 
   // end
-  ctx.fillStyle = "red";
-  ctx.fillRect(end[0] * cSize, end[1] * cSize, cSize, cSize);
+  pathCtx.fillStyle = "red";
+  pathCtx.fillRect(end[0] * cSize, end[1] * cSize, cSize, cSize);
 }
-
