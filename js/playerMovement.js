@@ -50,7 +50,13 @@ function checkInput() {
     playerY += dir[1];
 
     if ( playerX == end[0] && playerY == end[1] ) {
-      
+      Swal.fire({
+        title: "Congratulations! You reached the end!",
+        width: 600,
+        padding: "3em",
+        color: m_path_color,
+        background: m_wall_color
+      });
     }
   }
 }
