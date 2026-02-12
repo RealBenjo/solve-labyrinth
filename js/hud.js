@@ -17,6 +17,10 @@ function showInstructions() {
     width: 700,
     padding: "3em",
     color: m_path_color,
-    background: m_wall_color
+    background: m_wall_color,
+    customClass: {
+      confirmButton: 'button'
+    },
+    buttonsStyling: false // prevent default styling
   });
 }

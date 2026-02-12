@@ -160,13 +160,8 @@ input[type="range"]::-moz-range-thumb {
 #maze_important_inputs {
   gap: 20px;
 }
-#gen_maze_button {
-  width: 140px;
-  height: 40px;
-}
-#solve_maze_button {
-  width: 120px;
-  height: 40px;
+#instructions_maze_button {
+  font-size: 12px;
 }
 
 #footer {
@@ -192,6 +187,7 @@ input[type="range"]::-moz-range-thumb {
   margin: 0 auto;
 }
 .button {
+  padding: 10px 15px;
   background-color: var(--secondary-site-color);
   color: var(--primary-site-color);
   border: none;
@@ -209,13 +205,14 @@ input[type="range"]::-moz-range-thumb {
   color: var(--primary-bg-color);
   background-color: var(--highlight-site-color);
   box-shadow: 0 0 5px 5px var(--shadow-color);
-  transition: box-shadow 0.5s;
+  transition: box-shadow 0.5s, color 0.5s;
 }
 .hot_button:hover {
+  color: var(--secondary-site-color);
   box-shadow: 0 0 10px 10px var(--highlight-shadow-color);
-  color: var(--primary-bg-color);
 }
 .square_button {
+  padding: 0;
   width: 50px;
   height: 50px;
 }

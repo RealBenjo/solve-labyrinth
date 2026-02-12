@@ -1,4 +1,4 @@
-const inputSpeed = 150;
+const inputSpeed = 100;
 
 const keys = {
   w: false,
@@ -56,7 +56,11 @@ function checkInput() {
         padding: "3em",
         color: m_path_color,
         background: m_wall_color,
-        confirmButtonText: "New Maze"
+        confirmButtonText: "New Maze",
+        customClass: {
+          confirmButton: 'button'
+        },
+        buttonsStyling: false // prevent default styling
       }).then((result) => { // if user clicks the button, we make a new maze :)
         if (result.isConfirmed) {
           stopCurrentMazeGen();
