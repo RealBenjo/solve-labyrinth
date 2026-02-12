@@ -55,7 +55,14 @@ function checkInput() {
         width: 600,
         padding: "3em",
         color: m_path_color,
-        background: m_wall_color
+        background: m_wall_color,
+        confirmButtonText: "New Maze"
+      }).then((result) => { // if user clicks the button, we make a new maze :)
+        if (result.isConfirmed) {
+          stopCurrentMazeGen();
+          makeMaze();
+          drawPlayer();
+        }
       });
     }
   }

@@ -18,10 +18,10 @@
   </div>
 
   <!-- actual site -->
+  <div id="header" class="centered_content">
+    <h1>Solve Labyrinth</h1>
+  </div>
   <div id="main" class="centered_content col_dir">
-    <div id="header" class="centered_content">
-      <h1>Solve Labyrinth</h1>
-    </div>
 
     <div id="maze_stuff">
       <div id="maze_container" class="h_centered centered_content">
@@ -58,6 +58,7 @@
           <div id="maze_important_inputs" class="row_dir">
             <button id="gen_maze_button" class="button hot_button" onclick="stopCurrentMazeGen(); makeMaze(); drawPlayer()">Generate Maze</button>
             <button id="solve_maze_button" class="button" onclick="toggleSolution(); pathFind()">Show Solution</button>
+            <button id="pooper_maze_button" class="button" onclick="showInstructions()">Show Instructions</button>
           </div>
         </div>
       </div>
@@ -73,5 +74,6 @@
     <script src="js/maze.js"></script>
     <script src="js/playerMovement.js"></script>
     <script src="js/pathFinding.js"></script>
+    <script src="js/hud.js"></script>
   </div>
 </body>
