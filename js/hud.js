@@ -6,6 +6,7 @@ function showInstructions() {
       which is colored in <span style="color:red;">red</span>.</p><br>
       
       <b>Controls:</b><br>
+      for movement:<br>
       - WASD keys or<br>
       - Arrow keys<br><br>
 
