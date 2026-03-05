@@ -2,7 +2,7 @@
 
 <p align="center">
 An interactive <strong>maze generator and solver</strong> built with JavaScript,<br>
-powered by the <a href="https://github.com/qiao/PathFinding.js">PathFinding.js</a> library.
+powered by the <a href="https://github.com/qiao/PathFinding.js" target="_blank">PathFinding.js</a> library.
 </p>
 
 <hr>
@@ -24,7 +24,7 @@ powered by the <a href="https://github.com/qiao/PathFinding.js">PathFinding.js</
   <li>JavaScript</li>
   <li>HTML5</li>
   <li>CSS3</li>
-  <li><a href="https://github.com/qiao/PathFinding.js">PathFinding.js</a></li>
+  <li><a href="https://github.com/qiao/PathFinding.js" target="_blank">PathFinding.js</a></li>
 </ul>
 
 <p>
@@ -47,6 +47,6 @@ I used the A* (A star) pathfinding algorithm from the PathFinding.js library to 
 <h2>License</h2>
 
 <p>
-This project uses <a href="https://github.com/qiao/PathFinding.js">PathFinding.js</a> library, 
+This project uses <a href="https://github.com/qiao/PathFinding.js" target="_blank">PathFinding.js</a> library, 
 which is licensed under the MIT License.
 </p>
