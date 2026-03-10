@@ -41,7 +41,7 @@ const m_player_color = getComputedStyle( document.getElementById(m_player_color_
 const default_speed = 100;
 const min_speed = 200;
 const min_size = 11;
-const max_size = 501;
+const max_size = 201;
 
 // maze parameters
 var showMazeGen = false;
@@ -54,6 +54,10 @@ var showSolution = false; // used in pathFinding.js
 // set the display elements to default parameters
 size_display.innerText = size;
 gen_speed.value = default_speed;
+
+// this var is used to track wether or not the game has started aka:
+// received input from player
+var gameStarted = false;
 
 function handleSizeChange(change) {
   if (size + change > min_size && size + change < max_size) {

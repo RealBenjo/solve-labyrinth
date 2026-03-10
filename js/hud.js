@@ -25,3 +25,45 @@ function showInstructions() {
     buttonsStyling: false // prevent default styling
   });
 }
+
+
+// for maze gaming
+function showGameOver() {
+  Swal.fire({
+    title: "GAME OVER",
+    html: `<p>You ran out of time!</p>`,
+    width: 700,
+    padding: "3em",
+    color: m_path_color,
+    background: m_wall_color,
+    confirmButtonText: "Try Again",
+    customClass: {
+      confirmButton: 'button'
+    },
+    buttonsStyling: false
+  }).then((result) => {
+    if (result.isConfirmed) {
+      restartGame();
+    }
+  });
+}
+
+function showVictory() {
+  Swal.fire({
+    title: "You win!",
+    html: `<p>Congratulations! You solved the maze!</p>`,
+    width: 700,
+    padding: "3em",
+    color: m_path_color,
+    background: m_wall_color,
+    confirmButtonText: "Next Maze",
+    customClass: {
+      confirmButton: 'button'
+    },
+    buttonsStyling: false
+  }).then((result) => {
+    if (result.isConfirmed) {
+      restartGame();
+    }
+  });
+}

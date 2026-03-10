@@ -1,5 +1,20 @@
 const inputSpeed = 100;
 
+var isGameOver = false; // Flag to block input
+
+const gameTimer = new Timer({
+  start: 10, // Start at 1 second (per your code, adjust if you meant 60!)
+  stop: 0,
+  onUpdate: (val) => {
+    // You might want to update a UI element here too
+    console.log(`time left: ${val.toFixed(2)}`);
+  },
+  onComplete: () => {
+    isGameOver = true; // lock inputs
+    showGameOver(); // show the alert
+  }
+});
+
 const keys = {
   w: false,
   a: false,
@@ -22,52 +37,34 @@ let inputLoop = null;
 
 playerCtx.fillStyle = m_player_color;
 function checkInput() {
-  var dir = new Array();
+  // 1. EXIT EARLY if game is over
+  if (isGameOver) return;
 
-  if (keys.w || keys.ArrowUp) {
-    dir = playerDirs[0];
-  }
+  var dir = null; // Use null to start
 
-  else if (keys.d || keys.ArrowRight) {
-    dir = playerDirs[1];
-  }
+  if (keys.w || keys.ArrowUp) dir = playerDirs[0];
+  else if (keys.d || keys.ArrowRight) dir = playerDirs[1];
+  else if (keys.s || keys.ArrowDown) dir = playerDirs[2];
+  else if (keys.a || keys.ArrowLeft) dir = playerDirs[3];
+  
+  if (dir == null) return;
 
-  else if (keys.s || keys.ArrowDown) {
-    dir = playerDirs[2];
-  }
-
-  else if (keys.a || keys.ArrowLeft) {
-    dir = playerDirs[3];
+  // 2. Start timer ONLY on the first move
+  if (!gameStarted) {
+    gameStarted = true;
+    gameTimer.start();
   }
   
-  if (dir == null) {
-    return;
-  }
-  
+  // 3. Movement Logic
   if (checkArrBounds(playerX + dir[0], playerY + dir[1], maze_matrix.length) &&
       !checkNextPlayerCell(playerX + dir[0], playerY + dir[1], maze_matrix) ) {
+    
     playerX += dir[0];
     playerY += dir[1];
 
-    if ( playerX == end[0] && playerY == end[1] ) {
-      Swal.fire({
-        title: "Congratulations! You reached the end!",
-        width: 600,
-        padding: "3em",
-        color: m_path_color,
-        background: m_wall_color,
-        confirmButtonText: "New Maze",
-        customClass: {
-          confirmButton: 'button'
-        },
-        buttonsStyling: false // prevent default styling
-      }).then((result) => { // if user clicks the button, we make a new maze :)
-        if (result.isConfirmed) {
-          stopCurrentMazeGen();
-          makeMaze();
-          drawPlayer();
-        }
-      });
+    if (playerX == end[0] && playerY == end[1]) {
+      gameTimer.pause(); // Stop the clock!
+      showVictory(); // Call your existing Swal.fire for winning
     }
   }
 }
@@ -95,6 +92,13 @@ function animatePlayer() {
 
 animatePlayer();
 
+function restartGame() {
+  isGameOver = false;
+  gameStarted = false; // Reset start flag so timer waits for first move
+  gameTimer.reset(); // Sets back to start value
+  makeMaze(); // Your existing maze gen function
+  drawPlayer();
+}
 
 
 
