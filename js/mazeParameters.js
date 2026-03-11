@@ -1,4 +1,4 @@
-// names of the needed HTML elements
+// names of the needed color HTML elements
 const m_path_color_div_name = "m_path_color";
 const m_wall_color_div_name = "m_wall_color";
 const m_solution_color_div_name = "m_solution_color";
@@ -10,11 +10,15 @@ const show_gen_name = "gen_show_input";
 const maze_canvas_name = "maze_canvas";
 const path_canvas_name = "path_canvas";
 const player_canvas_name = "player_canvas";
+const param_dev_name = "param_container_dev";
+const param_usr_name = "param_container_usr";
 
 // actual HTML elements
 const size_display = document.getElementById(size_display_name);
 const gen_speed = document.getElementById(gen_speed_name);
 const show_gen = document.getElementById(show_gen_name);
+const param_dev = document.getElementById(param_dev_name);
+const param_usr = document.getElementById(param_usr_name);
 const path_canvas = document.getElementById(path_canvas_name);
 const pathCtx = path_canvas.getContext("2d");
 const maze_canvas = document.getElementById(maze_canvas_name);
@@ -59,6 +63,8 @@ gen_speed.value = default_speed;
 // received input from player
 var gameStarted = false;
 
+var devMode = false;
+
 function handleSizeChange(change) {
   if (size + change > min_size && size + change < max_size) {
     size += change;
@@ -82,4 +88,16 @@ function stopCurrentMazeGen() {
 
 function updateSpeed() {
   speed = min_speed - gen_speed.value;
+}
+
+function toggleOptions() {
+  devMode = !devMode;
+
+  if (devMode) {
+    param_dev.style.display = "flex";
+    param_usr.style.display = "none";
+  } else {
+    param_dev.style.display = "none";
+    param_usr.style.display = "flex";
+  }
 }
