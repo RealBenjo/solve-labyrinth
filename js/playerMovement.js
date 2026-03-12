@@ -1,13 +1,11 @@
 const inputSpeed = 100;
 
-var isGameOver = false; // Flag to block input
-
 const gameTimer = new Timer({
   start: 10, // TODO: make this dynamic
   stop: 0,
   onUpdate: (val) => {
     // updates the timer display
-    time_display.innerHTML = val.toFixed(2);
+    time_display.innerHTML = val.toFixed(2) + "s";
   },
   onComplete: () => {
     isGameOver = true; // lock inputs
@@ -37,6 +35,7 @@ let inputLoop = null;
 
 playerCtx.fillStyle = m_player_color;
 function checkInput() {
+
   // 1. EXIT EARLY if game is over
   if (isGameOver) return;
 
@@ -53,7 +52,6 @@ function checkInput() {
   if (!gameStarted) {
     gameStarted = true;
     gameTimer.start();
-    gameTimer.start = 60;
   }
   
   // 3. Movement Logic

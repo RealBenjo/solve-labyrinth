@@ -64,7 +64,9 @@ gen_speed.value = default_speed;
 // this var is used to track wether or not the game has started aka:
 // received input from player
 var gameStarted = false;
+var isGameOver = false;
 
+// toggles different UI for the user
 var devMode = false;
 
 function handleSizeChange(change) {
