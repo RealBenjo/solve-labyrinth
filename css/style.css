@@ -127,6 +127,9 @@ input[type="range"]::-moz-range-thumb {
   background-color: rgba(0, 0, 0, 0.3);
   border-radius: 0 30px 30px 0;
 }
+#prnt_param_container {
+  height: 100%;
+}
 #options_container {
   margin: 0 30px;
 }

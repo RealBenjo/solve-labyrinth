@@ -20,7 +20,7 @@
 
   <!-- actual site -->
   <div id="header" class="centered_content">
-    <h1>Solve Labyrinth</h1>
+    <h1>AMAZED</h1>
   </div>
   <div id="main" class="centered_content col_dir">
 
@@ -63,8 +63,14 @@
             </div>
           </div>
 
+          <!-- user parameters container -->
           <div id="param_container_usr" class="col_dir" style="display: flex;">
-  
+            
+            <div class="centered_content col_dir">
+              <h3>Time Left</h3>
+              <p id="time_display">--time--</p>
+            </div>
+
             <div id="maze_important_inputs" class="row_dir">
               <button id="gen_maze_button" class="button hot_button" onclick="stopCurrentMazeGen(); makeMaze(); drawPlayer()">Generate Maze</button>
               <button id="solve_maze_button" class="button" onclick="toggleSolution(); pathFind()">Show Solution</button>

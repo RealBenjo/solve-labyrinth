@@ -12,11 +12,13 @@ const path_canvas_name = "path_canvas";
 const player_canvas_name = "player_canvas";
 const param_dev_name = "param_container_dev";
 const param_usr_name = "param_container_usr";
+const time_display_name = "time_display";
 
 // actual HTML elements
 const size_display = document.getElementById(size_display_name);
 const gen_speed = document.getElementById(gen_speed_name);
 const show_gen = document.getElementById(show_gen_name);
+const time_display = document.getElementById(time_display_name);
 const param_dev = document.getElementById(param_dev_name);
 const param_usr = document.getElementById(param_usr_name);
 const path_canvas = document.getElementById(path_canvas_name);
