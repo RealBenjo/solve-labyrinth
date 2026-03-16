@@ -35,6 +35,17 @@ class Timer {
     if (this.onUpdate) this.onUpdate(this.currentValue);
   }
 
+  updateSettings(newStart, newStop = this.stopValue) {
+    this.startValue = newStart;
+    this.stopValue = newStop;
+    
+    // Recalculate if we are counting up or down
+    this.direction = this.stopValue > this.startValue ? 1 : -1;
+    
+    // Reset the timer to the new starting point
+    this.reset();
+  }
+
   tick() {
     if (!this.isRunning) return;
 

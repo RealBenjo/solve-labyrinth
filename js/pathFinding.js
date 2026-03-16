@@ -70,10 +70,10 @@ function drawSolution(path, cSize) {
   );
 
   // start
-  pathCtx.fillStyle = "green";
+  pathCtx.fillStyle = m_start_color;
   pathCtx.fillRect(start[0] * cSize, start[1] * cSize, cSize, cSize);
 
   // end
-  pathCtx.fillStyle = "red";
+  pathCtx.fillStyle = m_end_color;
   pathCtx.fillRect(end[0] * cSize, end[1] * cSize, cSize, cSize);
 }

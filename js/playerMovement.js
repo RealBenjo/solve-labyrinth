@@ -1,18 +1,5 @@
 const inputSpeed = 100;
 
-const gameTimer = new Timer({
-  start: 10, // TODO: make this dynamic
-  stop: 0,
-  onUpdate: (val) => {
-    // updates the timer display
-    time_display.innerHTML = val.toFixed(2) + "s";
-  },
-  onComplete: () => {
-    isGameOver = true; // lock inputs
-    showGameOver(); // show the alert
-  }
-});
-
 const keys = {
   w: false,
   a: false,

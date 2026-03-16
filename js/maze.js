@@ -33,6 +33,9 @@ async function makeMaze() {
     canMazeGen = false;
   }
 
+  gameTimer.updateSettings(curDifficulty);
+  time_display.innerHTML = curDifficulty.toFixed(2) + "s";
+
   // by default we don't want the user to see the solution to the maze
   showSolution = false;
   
@@ -251,11 +254,11 @@ function drawMaze(maze, mSize, cSize) {
   drawVerticalPaths(maze, mSize, cSize);
 
   // start
-  ctx.fillStyle = "green";
+  ctx.fillStyle = m_start_color;
   ctx.fillRect(start[0] * cSize, start[1] * cSize, cSize, cSize);
 
   // end
-  ctx.fillStyle = "red";
+  ctx.fillStyle = m_end_color;
   ctx.fillRect(end[0] * cSize, end[1] * cSize, cSize, cSize);
 }
 

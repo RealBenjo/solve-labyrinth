@@ -3,6 +3,8 @@ const m_path_color_div_name = "m_path_color";
 const m_wall_color_div_name = "m_wall_color";
 const m_solution_color_div_name = "m_solution_color";
 const m_player_color_div_name = "m_player_color";
+const m_start_color_div_name = "m_start_color";
+const m_end_color_div_name = "m_end_color";
 
 const size_display_name = "size_display";
 const gen_speed_name = "speed_input";
@@ -42,6 +44,8 @@ const m_path_color = getComputedStyle( document.getElementById(m_path_color_div_
 const m_wall_color = getComputedStyle( document.getElementById(m_wall_color_div_name) ).getPropertyValue("--maze-wall-color");
 const m_solution_color = getComputedStyle( document.getElementById(m_solution_color_div_name) ).getPropertyValue("--maze-solution-color");
 const m_player_color = getComputedStyle( document.getElementById(m_player_color_div_name) ).getPropertyValue("--maze-player-color");
+const m_start_color = getComputedStyle( document.getElementById(m_start_color_div_name) ).getPropertyValue("--maze-start-color");
+const m_end_color = getComputedStyle( document.getElementById(m_end_color_div_name) ).getPropertyValue("--maze-end-color");
 
 // maze default parameters
 const default_speed = 100;
@@ -54,8 +58,14 @@ var showMazeGen = false;
 var stopMazeGen = false;
 var isMazeGenerating = false;
 var speed = gen_speed.value;
-var size = 25;
 var showSolution = false; // used in pathFinding.js
+const difficulty = {
+  EASY: 25,
+  NORMAL: 45,
+  HARD: 69
+};
+var curDifficulty = difficulty.NORMAL; // tracks the current difficulty
+var size = curDifficulty; // size of maze
 
 // set the display elements to default parameters
 size_display.innerText = size;
@@ -65,6 +75,22 @@ gen_speed.value = default_speed;
 // received input from player
 var gameStarted = false;
 var isGameOver = false;
+
+// how long a player has to reach the finish
+const gameTimer = new Timer({
+  start: curDifficulty, // maybe this is good???
+  stop: 0,
+  onUpdate: (val) => {
+    // updates the timer display
+    time_display.innerHTML = val.toFixed(2) + "s";
+  },
+  onComplete: () => {
+    isGameOver = true; // lock inputs
+    showGameOver(); // show the alert
+  }
+});
+// just set the timer to default value at site start up
+time_display.innerHTML = curDifficulty.toFixed(2) + "s";
 
 // toggles different UI for the user
 var devMode = false;
@@ -82,9 +108,10 @@ function handleSizeChange(change) {
 
 function toggleShowGen() {
   showMazeGen = !showMazeGen;
-  if (showMazeGen) show_gen.innerText = "ON";
-  else show_gen.innerText = "OFF";
+
+  genButtonUI();
 }
+
 
 function stopCurrentMazeGen() {
   stopMazeGen = true;
@@ -95,8 +122,12 @@ function updateSpeed() {
 }
 
 function toggleOptions() {
+  showMazeGen = false;
+  
+  genButtonUI();
+  
   devMode = !devMode;
-
+  
   if (devMode) {
     param_dev.style.display = "flex";
     param_usr.style.display = "none";
@@ -104,4 +135,30 @@ function toggleOptions() {
     param_dev.style.display = "none";
     param_usr.style.display = "flex";
   }
+}
+
+function changeDifficulty(difficult) {
+  difficult.toLowerCase();
+  
+  switch (difficult) {
+    case "easy":
+      curDifficulty = difficulty.EASY;
+      break;
+    case "normal":
+      curDifficulty = difficulty.NORMAL;
+      break;
+    case "hard":
+      curDifficulty = difficulty.HARD;
+      break;
+  }
+  
+  size = curDifficulty;
+  makeMaze();
+}
+
+
+// AUX //
+function genButtonUI() {
+  if (showMazeGen) show_gen.innerText = "ON";
+  else show_gen.innerText = "OFF";
 }

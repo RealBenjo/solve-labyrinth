@@ -19,13 +19,17 @@
   --maze-path-color: #fce9ff;
   --maze-wall-color: #1e001b;
   --maze-solution-color: #ff6969;
-  --maze-player-color: #0400ff;
+  --maze-player-color: #7700ff;
+  --maze-start-color: #ff0095;
+  --maze-end-color: #ff0095;
 }
 /* for javascript to get the colors */
 #m_path_color { color: var(--maze-path-color); }
 #m_wall_color { color: var(--maze-wall-color); }
 #m_solution_color { color: var(--maze-solution-color); }
 #m_player_color { color: var(--maze-player-color); }
+#m_start_color { color: var(--maze-start-color); }
+#m_end_color { color: var(--maze-end-color); }
 
 * {
   margin: 0;
@@ -147,6 +151,9 @@ input[type="range"]::-moz-range-thumb {
   margin-top: 15px;
   width: 100%;
 }
+#difficulty_container {
+  gap: 5px;
+}
 #path_canvas {
   position: absolute;  
 }
@@ -230,8 +237,18 @@ input[type="range"]::-moz-range-thumb {
   width: 50px;
   height: 50px;
 }
+.rotate_left {
+  rotate: -90deg;
+}
 .rotate_right {
   rotate: 90deg;
+}
+.w_100 {
+  width: 100px;
+}
+.header {
+  font-size: 5rem;
+  margin-top: 5%;
 }
 
 @media (max-width = 1200px) {

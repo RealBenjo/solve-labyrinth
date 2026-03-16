@@ -16,11 +16,13 @@
     <div id="m_wall_color">maze wall color</div>
     <div id="m_solution_color">maze solution color</div>
     <div id="m_player_color">maze player color</div>
+    <div id="m_start_color">maze start color</div>
+    <div id="m_end_color">maze end color</div>
   </div>
 
   <!-- actual site -->
   <div id="header" class="centered_content">
-    <h1>AMAZED</h1>
+    <h1 class="header">i got no clue what to put here</h1>
   </div>
   <div id="main" class="centered_content col_dir">
 
@@ -69,6 +71,12 @@
             <div class="centered_content col_dir">
               <h3>Time Left</h3>
               <p id="time_display">10.00s</p>
+            </div>
+
+            <div id="difficulty_container" class="col_dir">
+              <button class="button w_100" onclick="changeDifficulty('easy')">EASY</button>
+              <button class="button w_100" onclick="changeDifficulty('normal')">NORMAL</button>
+              <button class="button w_100" onclick="changeDifficulty('hard')">HARD</button>
             </div>
 
             <div id="maze_important_inputs" class="row_dir">
