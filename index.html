@@ -21,76 +21,79 @@
   </div>
 
   <!-- actual site -->
-  <div id="header" class="centered_content">
-    <h1 class="header">i got no clue what to put here</h1>
-  </div>
   <div id="main" class="centered_content col_dir">
 
     <div id="maze_stuff">
-      <div id="maze_container" class="h_centered centered_content">
-        <canvas id="maze_canvas">if you see this text, the canvas did not load correctly</canvas>
-        <canvas id="path_canvas">if you see this text, the canvas did not load correctly</canvas>
-        <canvas id="player_canvas">if you see this text, the canvas did not load correctly</canvas>
+      <div id="header" class="centered_content">
+        <h1 class="header">The Puzzle Box</h1>
       </div>
-      
-      <div id="maze_param_container" class="centered_content">
-        <div id="prnt_param_container" class="row_dir">
-          <div id="param_container_dev" class="col_dir" style="display: none;">
-            <div id="maze_size_param">
-              <p class="h_centered" style="width: max-content;">maze size</p>
-              <div id="size_container" class="centered_content">
-                <button id="maze_size_minus" class="button square_button" onclick="handleSizeChange(-200)">MIN</button>
-                <button id="maze_size_minus" class="button square_button" onclick="handleSizeChange(-20)">-20</button>
-                <button id="maze_size_minus" class="button square_button" onclick="handleSizeChange(-2)">-2</button>
-                <div style="width: 50px;" class="centered_content"><p id="size_display"></p></div>
-                <button id="maze_size_plus" class="button square_button" onclick="handleSizeChange(2)">+2</button>
-                <button id="maze_size_plus" class="button square_button" onclick="handleSizeChange(20)">+20</button>
-                <button id="maze_size_plus" class="button square_button" onclick="handleSizeChange(200)">MAX</button>
+
+      <div id="maze_container_all">
+        <div id="maze_container" class="h_centered centered_content">
+          <canvas id="maze_canvas">if you see this text, the canvas did not load correctly</canvas>
+          <canvas id="path_canvas">if you see this text, the canvas did not load correctly</canvas>
+          <canvas id="player_canvas">if you see this text, the canvas did not load correctly</canvas>
+        </div>
+        
+        <div id="maze_param_container" class="centered_content">
+          <div id="prnt_param_container" class="row_dir">
+            <div id="param_container_dev" class="col_dir" style="display: none;">
+              <div id="maze_size_param">
+                <p class="h_centered" style="width: max-content;">maze size</p>
+                <div id="size_container" class="centered_content">
+                  <button id="maze_size_minus" class="button square_button" onclick="handleSizeChange(-200)">MIN</button>
+                  <button id="maze_size_minus" class="button square_button" onclick="handleSizeChange(-20)">-20</button>
+                  <button id="maze_size_minus" class="button square_button" onclick="handleSizeChange(-2)">-2</button>
+                  <div style="width: 50px;" class="centered_content"><p id="size_display"></p></div>
+                  <button id="maze_size_plus" class="button square_button" onclick="handleSizeChange(2)">+2</button>
+                  <button id="maze_size_plus" class="button square_button" onclick="handleSizeChange(20)">+20</button>
+                  <button id="maze_size_plus" class="button square_button" onclick="handleSizeChange(200)">MAX</button>
+                </div>
+              </div>
+              
+              <div id="maze_speed_param" class="col_dir">
+                <p>maze visualization speed</p>
+                <input id="speed_input" type="range" min="0" max="199" step="1" oninput="updateSpeed()">
+              </div>
+              
+              <div id="maze_generation_param" class="col_dir">
+                <p>maze visualization toggle</p>
+                <button id="gen_show_input" class="button square_button" onclick="toggleShowGen()">OFF</button>
+              </div>
+  
+              <div id="maze_important_inputs" class="row_dir">
+                <button id="gen_maze_button" class="button hot_button" onclick="stopCurrentMazeGen(); restartGame()">Generate Maze</button>
+                <button id="solve_maze_button" class="button" onclick="toggleSolution(); pathFind()">Show Solution</button>
               </div>
             </div>
-            
-            <div id="maze_speed_param" class="col_dir">
-              <p>maze visualization speed</p>
-              <input id="speed_input" type="range" min="0" max="199" step="1" oninput="updateSpeed()">
-            </div>
-            
-            <div id="maze_generation_param" class="col_dir">
-              <p>maze visualization toggle</p>
-              <button id="gen_show_input" class="button square_button" onclick="toggleShowGen()">OFF</button>
-            </div>
-
-            <div id="maze_important_inputs" class="row_dir">
-              <button id="gen_maze_button" class="button hot_button" onclick="stopCurrentMazeGen(); restartGame()">Generate Maze</button>
-              <button id="solve_maze_button" class="button" onclick="toggleSolution(); pathFind()">Show Solution</button>
-            </div>
-          </div>
-
-          <!-- user parameters container -->
-          <div id="param_container_usr" class="col_dir" style="display: flex;">
-            
-            <div class="centered_content col_dir">
-              <h3>Time Left</h3>
-              <p id="time_display">10.00s</p>
-            </div>
-
-            <div id="difficulty_container" class="col_dir">
-              <button class="button w_100" onclick="changeDifficulty('easy')">EASY</button>
-              <button class="button w_100" onclick="changeDifficulty('normal')">NORMAL</button>
-              <button class="button w_100" onclick="changeDifficulty('hard')">HARD</button>
-            </div>
-
-            <div id="maze_important_inputs" class="row_dir">
-              <button id="gen_maze_button" class="button hot_button" onclick="stopCurrentMazeGen(); restartGame()">Generate Maze</button>
-              <button id="solve_maze_button" class="button" onclick="toggleSolution(); pathFind()">Show Solution</button>
-            </div>
   
-            <div>
-              <button id="instructions_maze_button" class="button" onclick="showInstructions()">Show Instructions</button>
-            </div>
-          </div>
+            <!-- user parameters container -->
+            <div id="param_container_usr" class="col_dir" style="display: flex;">
+              
+              <div class="centered_content col_dir">
+                <h3>Time Left</h3>
+                <p id="time_display">10.00s</p>
+              </div>
   
-          <div id="panel_change" class="rotate_right">
-            <button class="button" onclick="toggleOptions()">change side panel</button>
+              <div id="difficulty_container" class="col_dir">
+                <button class="button w_100" onclick="changeDifficulty('easy')">EASY</button>
+                <button class="button w_100" onclick="changeDifficulty('normal')">NORMAL</button>
+                <button class="button w_100" onclick="changeDifficulty('hard')">HARD</button>
+              </div>
+  
+              <div id="maze_important_inputs" class="row_dir">
+                <button id="gen_maze_button" class="button hot_button" onclick="stopCurrentMazeGen(); restartGame()">Generate Maze</button>
+                <button id="solve_maze_button" class="button" onclick="toggleSolution(); pathFind()">Show Solution</button>
+              </div>
+    
+              <div>
+                <button id="instructions_maze_button" class="button" onclick="showInstructions()">Show Instructions</button>
+              </div>
+            </div>
+    
+            <div id="panel_change" class="rotate_right">
+              <button class="button" onclick="toggleOptions()">change side panel</button>
+            </div>
           </div>
         </div>
       </div>

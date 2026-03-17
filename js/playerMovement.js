@@ -49,8 +49,8 @@ function checkInput() {
     playerY += dir[1];
 
     if (playerX == end[0] && playerY == end[1]) {
-      gameTimer.pause(); // Stop the clock!
-      showVictory(); // Call your existing Swal.fire for winning
+      gameTimer.pause();
+      showVictory();
     }
   }
 }
@@ -65,24 +65,32 @@ function checkArrBounds(x, y, arrayLength) {
   return false;
 }
 
-function animatePlayer() {
-  const speed = 0.2; // animation smoothness (0.1 - 0.3 good)
 
-  renderX += (playerX - renderX) * speed;
-  renderY += (playerY - renderY) * speed;
+// VERY IMPORTANT, this is used to calculate delta, so the movement is the same across refreshrates :D
+var lastTime = 0;
+function animatePlayer(currentTime) {
+  delta = (currentTime - lastTime) / 1000; 
+  lastTime = currentTime;
+
+  const speed = 13; // not a scientific value, it just feels nice 
+  const correctSpeed = speed * delta;
+
+  renderX += (playerX - renderX) * correctSpeed;
+  renderY += (playerY - renderY) * correctSpeed;
 
   drawPlayer();
 
   requestAnimationFrame(animatePlayer);
 }
 
-animatePlayer();
+// Start the loop
+requestAnimationFrame(animatePlayer);
 
 function restartGame() {
   isGameOver = false;
-  gameStarted = false; // Reset start flag so timer waits for first move
-  gameTimer.reset(); // Sets back to start value
-  makeMaze(); // Your existing maze gen function
+  gameStarted = false;
+  gameTimer.reset();
+  makeMaze();
   drawPlayer();
 }
 

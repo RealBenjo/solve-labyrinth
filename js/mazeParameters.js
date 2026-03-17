@@ -95,6 +95,9 @@ time_display.innerHTML = curDifficulty.toFixed(2) + "s";
 // toggles different UI for the user
 var devMode = false;
 
+// just delta time so everything works nice across refreshrates :D
+var delta;
+
 function handleSizeChange(change) {
   if (size + change > min_size && size + change < max_size) {
     size += change;
@@ -153,7 +156,7 @@ function changeDifficulty(difficult) {
   }
   
   size = curDifficulty;
-  makeMaze();
+  restartGame();
 }
 
 

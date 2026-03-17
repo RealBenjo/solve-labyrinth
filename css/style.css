@@ -1,7 +1,7 @@
 /* ALL variables */
 :root {
-  --header-height: 10vh;
-  --body-height: 90vh;
+  --body-height: 100vh;
+  --maze-size: 550px;
 
   --primary-bg-color: #4e0f43;
 
@@ -120,11 +120,9 @@ input[type="range"]::-moz-range-thumb {
 #main {
   width: 100vw;
   height: var(--body-height);
-
-  /* vignette here */
 }
 #header {
-  height: var(--header-height);
+  margin-bottom: 20px;
 }
 #maze_param_container {
   height: 100%;
@@ -144,8 +142,11 @@ input[type="range"]::-moz-range-thumb {
   background-color: var(--maze-wall-color);
   border-radius: 30px 0 0 30px;
   float: left;
-  width: 550px;
-  height: 550px;
+  width: var(--maze-size);
+  height: var(--maze-size);
+}
+#maze_container_all {
+  height: var(--maze-size);
 }
 #maze_size_param {
   margin-top: 15px;
@@ -248,7 +249,6 @@ input[type="range"]::-moz-range-thumb {
 }
 .header {
   font-size: 5rem;
-  margin-top: 5%;
 }
 
 @media (max-width = 1200px) {
