@@ -15,6 +15,7 @@ const player_canvas_name = "player_canvas";
 const param_dev_name = "param_container_dev";
 const param_usr_name = "param_container_usr";
 const time_display_name = "time_display";
+const difficulty_container_name = "difficulty_container";
 
 // actual HTML elements
 const size_display = document.getElementById(size_display_name);
@@ -23,6 +24,7 @@ const show_gen = document.getElementById(show_gen_name);
 const time_display = document.getElementById(time_display_name);
 const param_dev = document.getElementById(param_dev_name);
 const param_usr = document.getElementById(param_usr_name);
+const difficulties = document.getElementById(difficulty_container_name).children; // all difficulty buttons
 const path_canvas = document.getElementById(path_canvas_name);
 const pathCtx = path_canvas.getContext("2d");
 const maze_canvas = document.getElementById(maze_canvas_name);
@@ -146,12 +148,24 @@ function changeDifficulty(difficult) {
   switch (difficult) {
     case "easy":
       curDifficulty = difficulty.EASY;
+
+      difficulties[0].style.fontSize = "18px";
+      difficulties[1].style.fontSize = "13px";
+      difficulties[2].style.fontSize = "13px";
       break;
     case "normal":
       curDifficulty = difficulty.NORMAL;
+
+      difficulties[0].style.fontSize = "13px";
+      difficulties[1].style.fontSize = "18px";
+      difficulties[2].style.fontSize = "13px";
       break;
     case "hard":
       curDifficulty = difficulty.HARD;
+
+      difficulties[0].style.fontSize = "13px";
+      difficulties[1].style.fontSize = "13px";
+      difficulties[2].style.fontSize = "18px";
       break;
   }
   
@@ -165,3 +179,5 @@ function genButtonUI() {
   if (showMazeGen) show_gen.innerText = "ON";
   else show_gen.innerText = "OFF";
 }
+
+changeDifficulty("normal");
