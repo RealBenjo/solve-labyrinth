@@ -85,9 +85,7 @@ async function generateMaze(maze, startX, startY, genId) {
     [-2, 0]  // left
   ];
 
-  maze[startX][startY] == false;
-
-
+  
   // actual maze algorithm stuff //
 
   // when we backtrack to the start we end the algorithm
@@ -169,7 +167,7 @@ function getNewDirection(directions, x, y, maze) {
 
 // AUX //
 function checkNextCell(nextX, nextY, maze) {
-  return maze[nextX][nextY] == true;
+  return maze[nextX][nextY];
 }
 
 function fillTheBlanks(dir, x, y, maze) {
