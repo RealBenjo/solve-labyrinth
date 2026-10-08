@@ -12,17 +12,17 @@ const keys = {
 };
 
 var playerDirs = [
-  [0, -1], // up
-  [1, 0],  // right
-  [0, 1],  // down
-  [-1, 0]  // left
+  new Vector2(0, -1), // up
+  new Vector2(1, 0),  // right
+  new Vector2(0, 1),  // down
+  new Vector2(-1, 0)  // left
 ];
 
 let inputLoop = null;
 
 playerCtx.fillStyle = m_player_color;
-function checkInput() {
 
+function checkInput() {
   // 1. EXIT EARLY if game is over
   if (isGameOver) return;
 
@@ -42,13 +42,14 @@ function checkInput() {
   }
   
   // 3. Movement Logic
-  if (checkArrBounds(playerX + dir[0], playerY + dir[1], maze_matrix.length) &&
-      !checkNextPlayerCell(playerX + dir[0], playerY + dir[1], maze_matrix) ) {
-    
-    playerX += dir[0];
-    playerY += dir[1];
+  const targetPos = player_pos.add(dir);
 
-    if (playerX == end[0] && playerY == end[1]) {
+  if (checkArrBounds(targetPos.x, targetPos.y, maze_matrix.length) &&
+      !checkNextPlayerCell(targetPos.x, targetPos.y, maze_matrix)) {
+    
+    player_pos = targetPos;
+
+    if (player_pos.x === end.x && player_pos.y === end.y) {
       gameTimer.pause();
       showVictory();
     }
@@ -65,7 +66,6 @@ function checkArrBounds(x, y, arrayLength) {
   return false;
 }
 
-
 // VERY IMPORTANT, this is used to calculate delta, so the movement is the same across refreshrates :D
 var lastTime = 0;
 function animatePlayer(currentTime) {
@@ -75,8 +75,8 @@ function animatePlayer(currentTime) {
   const speed = 13; // not a scientific value, it just feels nice 
   const correctSpeed = speed * delta;
 
-  renderX += (playerX - renderX) * correctSpeed;
-  renderY += (playerY - renderY) * correctSpeed;
+  renderPosition.x += (player_pos.x - renderPosition.x) * correctSpeed;
+  renderPosition.y += (player_pos.y - renderPosition.y) * correctSpeed;
 
   drawPlayer();
 
@@ -93,8 +93,6 @@ function restartGame() {
   makeMaze();
   drawPlayer();
 }
-
-
 
 window.addEventListener("keydown", (e) => {
   if (keys.hasOwnProperty(e.key)) {
